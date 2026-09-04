@@ -1585,13 +1585,51 @@ if ('IntersectionObserver' in window && staggerEls.length) {
 // Contact form (front-end only demo)
 const contactForm = document.getElementById('contact-form');
 if (contactForm) {
-  contactForm.addEventListener('submit', (e) => {
+  contactForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const success = document.getElementById('form-success');
-    contactForm.reset();
-    if (success) success.classList.add('show');
-    contactForm.style.opacity = '0.5';
-    contactForm.style.pointerEvents = 'none';
+    const submitBtn = contactForm.querySelector('button[type="submit"]');
+    const interests = Array.from(contactForm.querySelectorAll('input[name="interest"]:checked')).map(el => el.value);
+    const payload = {
+      access_key: '14ebd4ce-45fe-46b8-adc1-683fb9c46cdc',
+      subject: 'New website inquiry — Launch & Level Up Studio',
+      from_name: 'Launch & Level Up Studio website',
+      name: (contactForm.querySelector('#name') || {}).value || '',
+      email: (contactForm.querySelector('#email') || {}).value || '',
+      business: (contactForm.querySelector('#business') || {}).value || '',
+      interest: interests.join(', ') || 'Not specified',
+      message: (contactForm.querySelector('#message') || {}).value || '',
+      replyto: (contactForm.querySelector('#email') || {}).value || ''
+    };
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.dataset.label = submitBtn.textContent;
+      submitBtn.textContent = 'Sending...';
+    }
+    let delivered = false;
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json().catch(() => ({}));
+      delivered = res.ok && (data.success === true || data.success === 'true' || !('success' in data));
+    } catch (err) {
+      console.warn('Inquiry submission failed', err);
+    }
+    if (delivered) {
+      contactForm.reset();
+      if (success) success.classList.add('show');
+      contactForm.style.opacity = '0.5';
+      contactForm.style.pointerEvents = 'none';
+    } else {
+      alert('We could not send your inquiry just now. Please email launchandlevelupstudio@gmail.com directly.');
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = submitBtn.dataset.label || 'Send Inquiry';
+      }
+    }
   });
 }
 
@@ -1604,8 +1642,9 @@ if (contactForm) {
      fallback message since there's no live backend yet. -->
 <script>
   window.LLUChatbotConfig = {
-    endpoint: "https://YOUR-BACKEND.vercel.app/api/chat",
-    leadEndpoint: "https://YOUR-BACKEND.vercel.app/api/lead",
+    endpoint: "",
+    leadEndpoint: "https://api.web3forms.com/submit",
+    web3formsAccessKey: "14ebd4ce-45fe-46b8-adc1-683fb9c46cdc",
     clientId: "launch-level-up",
     businessName: "Launch & Level Up Studio",
     assistantName: "Launch Assistant",
@@ -1617,8 +1656,9 @@ if (contactForm) {
 (function () {
   const cfg = Object.assign(
     {
-      endpoint: 'https://YOUR-BACKEND.vercel.app/api/chat',
-      leadEndpoint: 'https://YOUR-BACKEND.vercel.app/api/lead',
+      endpoint: '',
+      leadEndpoint: 'https://api.web3forms.com/submit',
+      web3formsAccessKey: '14ebd4ce-45fe-46b8-adc1-683fb9c46cdc',
       clientId: 'launch-level-up',
       businessName: 'Launch & Level Up Studio',
       assistantName: 'Launch Assistant',
@@ -2034,12 +2074,27 @@ if (contactForm) {
       submitBtn.textContent = 'Sending...';
       let delivered = false;
       try {
-        const res = await fetch(cfg.leadEndpoint, {
+        const transcriptText = Array.isArray(lead.transcript)
+          ? lead.transcript.map(m => ((m.role || m.sender || 'msg') + ': ' + (m.text || m.content || ''))).join('\n')
+          : (typeof lead.transcript === 'string' ? lead.transcript : JSON.stringify(lead.transcript || []));
+        const res = await fetch(cfg.leadEndpoint || 'https://api.web3forms.com/submit', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ clientId: cfg.clientId, lead }),
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({
+            access_key: cfg.web3formsAccessKey || '14ebd4ce-45fe-46b8-adc1-683fb9c46cdc',
+            subject: 'New chat lead — Launch & Level Up Studio',
+            from_name: 'Launch Assistant',
+            name: lead.name,
+            email: lead.email,
+            business: lead.business || '',
+            need: lead.need || '',
+            timeline: lead.timeline || '',
+            message: ['Need: ' + (lead.need || 'n/a'), 'Timeline: ' + (lead.timeline || 'n/a'), '', 'Transcript:', transcriptText].join('\n'),
+            replyto: lead.email
+          }),
         });
-        delivered = res.ok;
+        const data = await res.json().catch(() => ({}));
+        delivered = res.ok && (data.success === true || data.success === 'true' || !('success' in data));
       } catch (e) {
         console.warn('Lead submission failed', e);
       }
