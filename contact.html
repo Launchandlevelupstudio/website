@@ -1138,6 +1138,13 @@ a.blog-card:hover .more svg{ transform: translateX(4px); }
 .article-cta p{ margin-top: 10px; color: var(--charcoal-2); }
 .article-cta .btn{ margin-top: 18px; }
 
+
+/* Keep floating chat from covering contact submit on phones */
+@media (max-width: 700px) {
+  #contact-form, form#contact-form { padding-bottom: 96px; }
+  .llu-chat-btn { bottom: 16px; right: 16px; width: 56px; height: 56px; }
+}
+
 </style>
 </head>
 <body>
@@ -1576,46 +1583,70 @@ if ('IntersectionObserver' in window && staggerEls.length) {
 // Contact form (front-end only demo)
 const contactForm = document.getElementById('contact-form');
 if (contactForm) {
+  // Honeypot for Web3Forms bot filtering (must stay empty)
+  if (!contactForm.querySelector('input[name="botcheck"]')) {
+    const hp = document.createElement('input');
+    hp.type = 'checkbox';
+    hp.name = 'botcheck';
+    hp.value = 'true';
+    hp.tabIndex = -1;
+    hp.autocomplete = 'off';
+    hp.setAttribute('aria-hidden', 'true');
+    hp.style.cssText = 'display:none !important; position:absolute; left:-9999px;';
+    contactForm.prepend(hp);
+  }
+  contactForm.setAttribute('data-form-version', 'w3f-2');
   contactForm.addEventListener('submit', async (e) => {
     e.preventDefault();
+    e.stopPropagation();
     const success = document.getElementById('form-success');
     const submitBtn = contactForm.querySelector('button[type="submit"]');
+    const name = (contactForm.querySelector('#name') || {}).value || '';
+    const email = (contactForm.querySelector('#email') || {}).value || '';
+    const business = (contactForm.querySelector('#business') || {}).value || '';
+    const message = (contactForm.querySelector('#message') || {}).value || '';
     const interests = Array.from(contactForm.querySelectorAll('input[name="interest"]:checked')).map(el => el.value);
-    const payload = {
-      access_key: '14ebd4ce-45fe-46b8-adc1-683fb9c46cdc',
-      subject: 'New website inquiry — Launch & Level Up Studio',
-      from_name: 'Launch & Level Up Studio website',
-      name: (contactForm.querySelector('#name') || {}).value || '',
-      email: (contactForm.querySelector('#email') || {}).value || '',
-      business: (contactForm.querySelector('#business') || {}).value || '',
-      interest: interests.join(', ') || 'Not specified',
-      message: (contactForm.querySelector('#message') || {}).value || '',
-      replyto: (contactForm.querySelector('#email') || {}).value || ''
-    };
+    if (!name.trim() || !email.trim()) {
+      alert('Please add your name and email.');
+      return;
+    }
     if (submitBtn) {
       submitBtn.disabled = true;
       submitBtn.dataset.label = submitBtn.textContent;
       submitBtn.textContent = 'Sending...';
     }
+    const fd = new FormData();
+    fd.append('access_key', '14ebd4ce-45fe-46b8-adc1-683fb9c46cdc');
+    fd.append('subject', 'New website inquiry - Launch & Level Up Studio');
+    fd.append('from_name', name.trim() || 'Website inquiry');
+    fd.append('name', name.trim());
+    fd.append('email', email.trim());
+    fd.append('business', business.trim());
+    fd.append('interest', interests.join(', ') || 'Not specified');
+    fd.append('message', message.trim() || '(No message provided)');
+    fd.append('replyto', email.trim());
+    fd.append('botcheck', ''); // must be empty
     let delivered = false;
+    let errMsg = '';
     try {
-      const res = await fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify(payload)
-      });
+      const res = await fetch('https://api.web3forms.com/submit', { method: 'POST', body: fd });
       const data = await res.json().catch(() => ({}));
-      delivered = res.ok && (data.success === true || data.success === 'true' || !('success' in data));
+      delivered = !!(res.ok && data && data.success);
+      if (!delivered) errMsg = (data && (data.message || data.error)) || ('HTTP ' + res.status);
     } catch (err) {
       console.warn('Inquiry submission failed', err);
+      errMsg = (err && err.message) || 'network error';
     }
     if (delivered) {
       contactForm.reset();
-      if (success) success.classList.add('show');
+      if (success) {
+        success.textContent = 'Thanks — your inquiry was sent. We will reply to your email within 1 business day.';
+        success.classList.add('show');
+      }
       contactForm.style.opacity = '0.5';
       contactForm.style.pointerEvents = 'none';
     } else {
-      alert('We could not send your inquiry just now. Please email launchandlevelupstudio@gmail.com directly.');
+      alert('We could not send your inquiry (' + (errMsg || 'unknown') + '). Please email launchandlevelupstudio@gmail.com directly.');
       if (submitBtn) {
         submitBtn.disabled = false;
         submitBtn.textContent = submitBtn.dataset.label || 'Send Inquiry';
@@ -2006,32 +2037,31 @@ if (contactForm) {
         alert('Please add at least your name and email.');
         return;
       }
-      const submitBtn = leadFormEl.querySelector('.llu-lead-submit');
+            const submitBtn = leadFormEl.querySelector('.llu-lead-submit');
       submitBtn.disabled = true;
       submitBtn.textContent = 'Sending...';
       let delivered = false;
       try {
         const transcriptText = Array.isArray(lead.transcript)
-          ? lead.transcript.map(m => ((m.role || m.sender || 'msg') + ': ' + (m.text || m.content || ''))).join('\n')
+          ? lead.transcript.map(m => ((m.role || m.sender || 'msg') + ': ' + (m.text || m.content || ''))).join('
+')
           : (typeof lead.transcript === 'string' ? lead.transcript : JSON.stringify(lead.transcript || []));
-        const res = await fetch(cfg.leadEndpoint || 'https://api.web3forms.com/submit', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          body: JSON.stringify({
-            access_key: cfg.web3formsAccessKey || '14ebd4ce-45fe-46b8-adc1-683fb9c46cdc',
-            subject: 'New chat lead — Launch & Level Up Studio',
-            from_name: 'Launch Assistant',
-            name: lead.name,
-            email: lead.email,
-            business: lead.business || '',
-            need: lead.need || '',
-            timeline: lead.timeline || '',
-            message: ['Need: ' + (lead.need || 'n/a'), 'Timeline: ' + (lead.timeline || 'n/a'), '', 'Transcript:', transcriptText].join('\n'),
-            replyto: lead.email
-          }),
-        });
+        const fd = new FormData();
+        fd.append('access_key', cfg.web3formsAccessKey || '14ebd4ce-45fe-46b8-adc1-683fb9c46cdc');
+        fd.append('subject', 'New chat lead - Launch & Level Up Studio');
+        fd.append('from_name', lead.name || 'Chat lead');
+        fd.append('name', lead.name || '');
+        fd.append('email', lead.email || '');
+        fd.append('business', lead.business || '');
+        fd.append('need', lead.need || '');
+        fd.append('timeline', lead.timeline || '');
+        fd.append('message', ['Need: ' + (lead.need || 'n/a'), 'Timeline: ' + (lead.timeline || 'n/a'), '', 'Transcript:', transcriptText].join('
+'));
+        fd.append('replyto', lead.email || '');
+        fd.append('botcheck', '');
+        const res = await fetch(cfg.leadEndpoint || 'https://api.web3forms.com/submit', { method: 'POST', body: fd });
         const data = await res.json().catch(() => ({}));
-        delivered = res.ok && (data.success === true || data.success === 'true' || !('success' in data));
+        delivered = !!(res.ok && data && data.success);
       } catch (e) {
         console.warn('Lead submission failed', e);
       }
