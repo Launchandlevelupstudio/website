@@ -1170,13 +1170,55 @@ img.hero-watermark{ max-width: min(520px, 70vw); opacity: 0.14; }
   width: 22px; height: 22px; border-radius: 50%; object-fit: cover; display:block;
 }
 
+
+/* Audit fixes: pricing cards + hero CTA tap targets */
+@media (max-width: 640px){
+  .price-table-scroll{ overflow: visible; }
+  .price-table{ min-width: 0; width: 100%; }
+  .price-table thead{ display: none; }
+  .price-table, .price-table tbody, .price-table tr, .price-table td{ display: block; width: 100%; }
+  .price-table tr{
+    margin: 0 0 16px; border: 1px solid rgba(11,11,12,0.1); border-radius: 12px;
+    overflow: hidden; background: #fff;
+  }
+  .price-table td{
+    border-bottom: 1px solid rgba(11,11,12,0.06); padding: 14px 16px; width: 100% !important;
+    white-space: normal;
+  }
+  .price-table td:last-child{ border-bottom: none; }
+  .price-table td.pname{
+    background: var(--ink); color: #fff; font-size: 16px; padding: 16px;
+  }
+  .price-table td.pprice{ color: var(--gold-deep); font-size: 18px; }
+  .price-table td::before{
+    content: attr(data-label);
+    display: block; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--gold-deep); font-weight: 700; margin-bottom: 6px;
+  }
+  .price-table td.pname::before{ display: none; }
+  .hero-actions{ flex-direction: column; align-items: stretch; gap: 12px; }
+  .hero-actions .btn{ width: 100%; justify-content: center; min-height: 48px; }
+}
+
 </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Launch & Level Up Studio",
+  "url": "https://launchandlevelupstudio.com",
+  "logo": "https://launchandlevelupstudio.com/assets/logo.png",
+  "email": "launchandlevelupstudio@gmail.com",
+  "description": "Next-generation design for businesses ready to launch, grow & level up. Website design, logo redesign, brand refresh, business launch support, and digital presence setup \u2014 serving small businesses across the United States, 100% remote.",
+  "areaServed": "US"
+}
+</script>
 </head>
 <body>
 
 <nav class="site-nav">
   <div class="wrap">
-    <a href="index.html" class="brand"><img src="assets/logo.png" alt="Launch & Level Up Studio"></a>
+    <a href="index.html" class="brand"><img src="assets/logo.png" alt="Launch &amp; Level Up Studio logo"></a>
     <ul class="nav-links">
       <li><a href="index.html">Home</a></li>
       <li><a href="services.html">Services</a></li>
@@ -1197,7 +1239,7 @@ img.hero-watermark{ max-width: min(520px, 70vw); opacity: 0.14; }
     <path d="M40 520 L520 40" stroke="#B8912F" stroke-width="10" stroke-linecap="round" opacity="0.4"/>
   </svg>
   <div class="page-header-glow" aria-hidden="true"></div>
-  <img class="site-logo page-header-logo" src="assets/logo.png" alt="" aria-hidden="true">
+  <img class="site-logo page-header-logo" src="assets/logo.png" alt="Launch &amp; Level Up Studio logo">
   <div class="wrap">
     <span class="eyebrow on-dark">Get In Touch</span>
     <h1>Let's build something you're proud of.</h1>
@@ -1268,7 +1310,7 @@ img.hero-watermark{ max-width: min(520px, 70vw); opacity: 0.14; }
   <div class="wrap">
     <div class="footer-top">
       <div>
-        <img src="assets/logo.png" alt="Launch & Level Up Studio">
+        <img src="assets/logo.png" alt="Launch &amp; Level Up Studio logo">
         <p>Next-generation design for brands ready to launch, grow, and level up.</p>
       </div>
       <div class="footer-col">

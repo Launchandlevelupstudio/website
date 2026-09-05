@@ -1154,13 +1154,55 @@ img.hero-watermark{ max-width: min(520px, 70vw); opacity: 0.14; object-fit: cont
 .llu-chat-header-icon img{ width: 22px; height: 22px; border-radius: 50%; object-fit: cover; display:block; }
 .shot-frame img{ width: 100%; height: auto; display: block; border-radius: inherit; }
 
+
+/* Audit fixes: pricing cards + hero CTA tap targets */
+@media (max-width: 640px){
+  .price-table-scroll{ overflow: visible; }
+  .price-table{ min-width: 0; width: 100%; }
+  .price-table thead{ display: none; }
+  .price-table, .price-table tbody, .price-table tr, .price-table td{ display: block; width: 100%; }
+  .price-table tr{
+    margin: 0 0 16px; border: 1px solid rgba(11,11,12,0.1); border-radius: 12px;
+    overflow: hidden; background: #fff;
+  }
+  .price-table td{
+    border-bottom: 1px solid rgba(11,11,12,0.06); padding: 14px 16px; width: 100% !important;
+    white-space: normal;
+  }
+  .price-table td:last-child{ border-bottom: none; }
+  .price-table td.pname{
+    background: var(--ink); color: #fff; font-size: 16px; padding: 16px;
+  }
+  .price-table td.pprice{ color: var(--gold-deep); font-size: 18px; }
+  .price-table td::before{
+    content: attr(data-label);
+    display: block; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--gold-deep); font-weight: 700; margin-bottom: 6px;
+  }
+  .price-table td.pname::before{ display: none; }
+  .hero-actions{ flex-direction: column; align-items: stretch; gap: 12px; }
+  .hero-actions .btn{ width: 100%; justify-content: center; min-height: 48px; }
+}
+
 </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Launch & Level Up Studio",
+  "url": "https://launchandlevelupstudio.com",
+  "logo": "https://launchandlevelupstudio.com/assets/logo.png",
+  "email": "launchandlevelupstudio@gmail.com",
+  "description": "Next-generation design for businesses ready to launch, grow & level up. Website design, logo redesign, brand refresh, business launch support, and digital presence setup \u2014 serving small businesses across the United States, 100% remote.",
+  "areaServed": "US"
+}
+</script>
 </head>
 <body>
 
 <nav class="site-nav">
   <div class="wrap">
-    <a href="index.html" class="brand"><img src="assets/logo.png" alt="Launch & Level Up Studio"></a>
+    <a href="index.html" class="brand"><img src="assets/logo.png" alt="Launch &amp; Level Up Studio logo"></a>
     <ul class="nav-links">
       <li><a href="index.html">Home</a></li>
       <li><a href="services.html">Services</a></li>
@@ -1181,7 +1223,7 @@ img.hero-watermark{ max-width: min(520px, 70vw); opacity: 0.14; object-fit: cont
     <path d="M40 520 L520 40" stroke="#B8912F" stroke-width="10" stroke-linecap="round" opacity="0.4"/>
   </svg>
   <div class="page-header-glow" aria-hidden="true"></div>
-  <img class="page-header-logo" src="assets/logo.png" alt="" aria-hidden="true">
+  <img class="page-header-logo" src="assets/logo.png" alt="Launch &amp; Level Up Studio logo">
   <div class="wrap">
     <span class="eyebrow on-dark">Our Work</span>
     <h1>Real brands. Real transformations.</h1>
@@ -1259,25 +1301,26 @@ img.hero-watermark{ max-width: min(520px, 70vw); opacity: 0.14; object-fit: cont
   </div>
 </section>
 
+
 <section>
   <div class="wrap">
     <div class="section-head reveal">
-      <span class="eyebrow">Coming Soon</span>
-      <h2>More case studies in progress.</h2>
-      <p>Launch &amp; Level Up Studio is actively building out new client work — check back soon, or become one of our next featured stories.</p>
+      <span class="eyebrow">How We Work</span>
+      <h2>What a project looks like.</h2>
+      <p>Every engagement follows a clear path — so you always know what’s next, and nothing important gets lost in the shuffle.</p>
     </div>
     <div class="bundle-grid reveal">
       <div class="coming-card">
-        <div class="plus">+</div>
-        <p>Brand refresh case study — coming soon</p>
+        <div class="plus">01</div>
+        <p><strong>Discover</strong><br>A focused call to map goals, audience, and what “done” looks like for your business.</p>
       </div>
       <div class="coming-card">
-        <div class="plus">+</div>
-        <p>AI automation case study — coming soon</p>
+        <div class="plus">02</div>
+        <p><strong>Design &amp; Build</strong><br>Brand, site, and systems crafted to convert — with your feedback at every key milestone.</p>
       </div>
       <div class="coming-card">
-        <div class="plus">+</div>
-        <p>Your business, featured here next</p>
+        <div class="plus">03</div>
+        <p><strong>Launch &amp; Level Up</strong><br>Go live clean, then keep growing with optional care, content, and automation.</p>
       </div>
     </div>
   </div>
@@ -1300,7 +1343,7 @@ img.hero-watermark{ max-width: min(520px, 70vw); opacity: 0.14; object-fit: cont
   <div class="wrap">
     <div class="footer-top">
       <div>
-        <img src="assets/logo.png" alt="Launch & Level Up Studio">
+        <img src="assets/logo.png" alt="Launch &amp; Level Up Studio logo">
         <p>Next-generation design for brands ready to launch, grow, and level up.</p>
       </div>
       <div class="footer-col">

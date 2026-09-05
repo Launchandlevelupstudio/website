@@ -1170,13 +1170,55 @@ img.hero-watermark{ max-width: min(520px, 70vw); opacity: 0.14; }
   width: 22px; height: 22px; border-radius: 50%; object-fit: cover; display:block;
 }
 
+
+/* Audit fixes: pricing cards + hero CTA tap targets */
+@media (max-width: 640px){
+  .price-table-scroll{ overflow: visible; }
+  .price-table{ min-width: 0; width: 100%; }
+  .price-table thead{ display: none; }
+  .price-table, .price-table tbody, .price-table tr, .price-table td{ display: block; width: 100%; }
+  .price-table tr{
+    margin: 0 0 16px; border: 1px solid rgba(11,11,12,0.1); border-radius: 12px;
+    overflow: hidden; background: #fff;
+  }
+  .price-table td{
+    border-bottom: 1px solid rgba(11,11,12,0.06); padding: 14px 16px; width: 100% !important;
+    white-space: normal;
+  }
+  .price-table td:last-child{ border-bottom: none; }
+  .price-table td.pname{
+    background: var(--ink); color: #fff; font-size: 16px; padding: 16px;
+  }
+  .price-table td.pprice{ color: var(--gold-deep); font-size: 18px; }
+  .price-table td::before{
+    content: attr(data-label);
+    display: block; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--gold-deep); font-weight: 700; margin-bottom: 6px;
+  }
+  .price-table td.pname::before{ display: none; }
+  .hero-actions{ flex-direction: column; align-items: stretch; gap: 12px; }
+  .hero-actions .btn{ width: 100%; justify-content: center; min-height: 48px; }
+}
+
 </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Launch & Level Up Studio",
+  "url": "https://launchandlevelupstudio.com",
+  "logo": "https://launchandlevelupstudio.com/assets/logo.png",
+  "email": "launchandlevelupstudio@gmail.com",
+  "description": "Next-generation design for businesses ready to launch, grow & level up. Website design, logo redesign, brand refresh, business launch support, and digital presence setup \u2014 serving small businesses across the United States, 100% remote.",
+  "areaServed": "US"
+}
+</script>
 </head>
 <body>
 
 <nav class="site-nav">
   <div class="wrap">
-    <a href="index.html" class="brand"><img src="assets/logo.png" alt="Launch & Level Up Studio"></a>
+    <a href="index.html" class="brand"><img src="assets/logo.png" alt="Launch &amp; Level Up Studio logo"></a>
     <ul class="nav-links">
       <li><a href="index.html">Home</a></li>
       <li><a href="services.html" class="active">Services</a></li>
@@ -1197,7 +1239,7 @@ img.hero-watermark{ max-width: min(520px, 70vw); opacity: 0.14; }
     <path d="M40 520 L520 40" stroke="#B8912F" stroke-width="10" stroke-linecap="round" opacity="0.4"/>
   </svg>
   <div class="page-header-glow" aria-hidden="true"></div>
-  <img class="site-logo page-header-logo" src="assets/logo.png" alt="" aria-hidden="true">
+  <img class="site-logo page-header-logo" src="assets/logo.png" alt="Launch &amp; Level Up Studio logo">
   <div class="wrap">
     <span class="eyebrow on-dark">Services & Investment</span>
     <h1>Everything you need to launch, grow, and level up.</h1>
@@ -1215,9 +1257,9 @@ img.hero-watermark{ max-width: min(520px, 70vw); opacity: 0.14; }
     <div class="price-table-scroll">
       <table class="price-table">
         <tr><th>Package</th><th>What's Included</th><th>Investment</th></tr>
-        <tr><td class="pname">Starter Site</td><td>Up to 5 custom pages, mobile-responsive, contact/inquiry form, brand-aligned design.</td><td class="pprice">$2,200</td></tr>
-        <tr><td class="pname">Growth Site</td><td>Up to 10 pages, portfolio/case studies, testimonials, lead-capture CTAs, on-page SEO setup.</td><td class="pprice">$3,800</td></tr>
-        <tr><td class="pname">Premium Site</td><td>Fully custom build, booking/e-commerce integration, animations, advanced SEO &amp; analytics.</td><td class="pprice">$6,200</td></tr>
+        <tr><td class="pname" data-label="Package">Starter Site</td><td data-label="What&#x27;s Included">Up to 5 custom pages, mobile-responsive, contact/inquiry form, brand-aligned design.</td><td class="pprice" data-label="Investment">$2,200</td></tr>
+        <tr><td class="pname" data-label="Package">Growth Site</td><td data-label="What&#x27;s Included">Up to 10 pages, portfolio/case studies, testimonials, lead-capture CTAs, on-page SEO setup.</td><td class="pprice" data-label="Investment">$3,800</td></tr>
+        <tr><td class="pname" data-label="Package">Premium Site</td><td data-label="What&#x27;s Included">Fully custom build, booking/e-commerce integration, animations, advanced SEO &amp; analytics.</td><td class="pprice" data-label="Investment">$6,200</td></tr>
       </table>
     </div>
   </section>
@@ -1230,9 +1272,9 @@ img.hero-watermark{ max-width: min(520px, 70vw); opacity: 0.14; }
     <div class="price-table-scroll">
       <table class="price-table">
         <tr><th>Package</th><th>What's Included</th><th>Investment</th></tr>
-        <tr><td class="pname">Logo Refresh</td><td>Modernize an existing logo — updated mark, color palette, typography pairing.</td><td class="pprice">$450</td></tr>
-        <tr><td class="pname">New Logo + Brand Mark</td><td>Custom logo design, 2 concept directions, 2 revision rounds, full file package.</td><td class="pprice">$650</td></tr>
-        <tr><td class="pname">Brand Refresh</td><td>Colors, typography, messaging, and a short style guide to unify the brand.</td><td class="pprice">$950</td></tr>
+        <tr><td class="pname" data-label="Package">Logo Refresh</td><td data-label="What&#x27;s Included">Modernize an existing logo — updated mark, color palette, typography pairing.</td><td class="pprice" data-label="Investment">$450</td></tr>
+        <tr><td class="pname" data-label="Package">New Logo + Brand Mark</td><td data-label="What&#x27;s Included">Custom logo design, 2 concept directions, 2 revision rounds, full file package.</td><td class="pprice" data-label="Investment">$650</td></tr>
+        <tr><td class="pname" data-label="Package">Brand Refresh</td><td data-label="What&#x27;s Included">Colors, typography, messaging, and a short style guide to unify the brand.</td><td class="pprice" data-label="Investment">$950</td></tr>
       </table>
     </div>
   </section>
@@ -1245,9 +1287,9 @@ img.hero-watermark{ max-width: min(520px, 70vw); opacity: 0.14; }
     <div class="price-table-scroll">
       <table class="price-table">
         <tr><th>Package</th><th>What's Included</th><th>Investment</th></tr>
-        <tr><td class="pname">AI Starter</td><td>One AI chatbot for FAQs, lead capture, and appointment inquiries on your website.</td><td class="pprice">$750 setup + $75/mo</td></tr>
-        <tr><td class="pname">AI Growth</td><td>Chatbot + workflow automation — scheduling, follow-ups, and CRM syncing.</td><td class="pprice">$1,600 setup + $150/mo</td></tr>
-        <tr><td class="pname">AI Full Suite</td><td>Chatbot, workflow automation, AI content assistance, and lead-gen funnels.</td><td class="pprice">$2,800 setup + $250/mo</td></tr>
+        <tr><td class="pname" data-label="Package">AI Starter</td><td data-label="What&#x27;s Included">One AI chatbot for FAQs, lead capture, and appointment inquiries on your website.</td><td class="pprice" data-label="Investment">$750 setup + $75/mo</td></tr>
+        <tr><td class="pname" data-label="Package">AI Growth</td><td data-label="What&#x27;s Included">Chatbot + workflow automation — scheduling, follow-ups, and CRM syncing.</td><td class="pprice" data-label="Investment">$1,600 setup + $150/mo</td></tr>
+        <tr><td class="pname" data-label="Package">AI Full Suite</td><td data-label="What&#x27;s Included">Chatbot, workflow automation, AI content assistance, and lead-gen funnels.</td><td class="pprice" data-label="Investment">$2,800 setup + $250/mo</td></tr>
       </table>
     </div>
   </section>
@@ -1260,9 +1302,9 @@ img.hero-watermark{ max-width: min(520px, 70vw); opacity: 0.14; }
     <div class="price-table-scroll">
       <table class="price-table">
         <tr><th>Package</th><th>What's Included</th><th>Investment</th></tr>
-        <tr><td class="pname">Blog Boost</td><td>2 SEO-optimized posts/month, keyword targeting, meta titles &amp; descriptions, on-site publishing.</td><td class="pprice">$550/mo</td></tr>
-        <tr><td class="pname">Weekly Blog SEO</td><td>4 posts/month (weekly cadence), keyword research, internal linking, meta data, image sourcing.</td><td class="pprice">$1,100/mo</td></tr>
-        <tr><td class="pname">Blog + Growth</td><td>4 posts/month plus a content strategy calendar, social snippet repurposing, and a monthly performance report.</td><td class="pprice">$1,650/mo</td></tr>
+        <tr><td class="pname" data-label="Package">Blog Boost</td><td data-label="What&#x27;s Included">2 SEO-optimized posts/month, keyword targeting, meta titles &amp; descriptions, on-site publishing.</td><td class="pprice" data-label="Investment">$550/mo</td></tr>
+        <tr><td class="pname" data-label="Package">Weekly Blog SEO</td><td data-label="What&#x27;s Included">4 posts/month (weekly cadence), keyword research, internal linking, meta data, image sourcing.</td><td class="pprice" data-label="Investment">$1,100/mo</td></tr>
+        <tr><td class="pname" data-label="Package">Blog + Growth</td><td data-label="What&#x27;s Included">4 posts/month plus a content strategy calendar, social snippet repurposing, and a monthly performance report.</td><td class="pprice" data-label="Investment">$1,650/mo</td></tr>
       </table>
     </div>
   </section>
@@ -1275,8 +1317,8 @@ img.hero-watermark{ max-width: min(520px, 70vw); opacity: 0.14; }
     <div class="price-table-scroll">
       <table class="price-table">
         <tr><th>Package</th><th>What's Included</th><th>Investment</th></tr>
-        <tr><td class="pname">Care Basics</td><td>Software/plugin updates, security monitoring, nightly backups, uptime checks.</td><td class="pprice">$75/mo</td></tr>
-        <tr><td class="pname">Care Plus</td><td>Everything in Basics, plus up to 30 min of monthly content edits, priority support, and a monthly health report.</td><td class="pprice">$145/mo</td></tr>
+        <tr><td class="pname" data-label="Package">Care Basics</td><td data-label="What&#x27;s Included">Software/plugin updates, security monitoring, nightly backups, uptime checks.</td><td class="pprice" data-label="Investment">$75/mo</td></tr>
+        <tr><td class="pname" data-label="Package">Care Plus</td><td data-label="What&#x27;s Included">Everything in Basics, plus up to 30 min of monthly content edits, priority support, and a monthly health report.</td><td class="pprice" data-label="Investment">$145/mo</td></tr>
       </table>
     </div>
   </section>
@@ -1290,8 +1332,8 @@ img.hero-watermark{ max-width: min(520px, 70vw); opacity: 0.14; }
     <div class="price-table-scroll">
       <table class="price-table">
         <tr><th>Package</th><th>What's Included</th><th>Investment</th></tr>
-        <tr><td class="pname">Social Starter</td><td>12 designed posts/month (3/week), monthly content calendar, captions, and scheduling on 1 platform.</td><td class="pprice">$650/mo</td></tr>
-        <tr><td class="pname">Social Growth</td><td>20 designed posts/month (5/week), content calendar, captions, and scheduling across 2 platforms.</td><td class="pprice">$950/mo</td></tr>
+        <tr><td class="pname" data-label="Package">Social Starter</td><td data-label="What&#x27;s Included">12 designed posts/month (3/week), monthly content calendar, captions, and scheduling on 1 platform.</td><td class="pprice" data-label="Investment">$650/mo</td></tr>
+        <tr><td class="pname" data-label="Package">Social Growth</td><td data-label="What&#x27;s Included">20 designed posts/month (5/week), content calendar, captions, and scheduling across 2 platforms.</td><td class="pprice" data-label="Investment">$950/mo</td></tr>
       </table>
     </div>
   </section>
@@ -1346,7 +1388,7 @@ img.hero-watermark{ max-width: min(520px, 70vw); opacity: 0.14; }
   <div class="wrap">
     <div class="footer-top">
       <div>
-        <img src="assets/logo.png" alt="Launch & Level Up Studio">
+        <img src="assets/logo.png" alt="Launch &amp; Level Up Studio logo">
         <p>Next-generation design for brands ready to launch, grow, and level up.</p>
       </div>
       <div class="footer-col">
