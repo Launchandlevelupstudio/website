@@ -1745,7 +1745,7 @@ if (contactForm) {
     businessName: "Launch & Level Up Studio",
     assistantName: "Launch Assistant",
     contactEmail: "launchandlevelupstudio@gmail.com",
-    maxMessagesPerDay: 10
+    maxMessagesPerDay: 6
   };
 </script>
 <script>
@@ -1759,7 +1759,7 @@ if (contactForm) {
       businessName: 'Launch & Level Up Studio',
       assistantName: 'Launch Assistant',
       contactEmail: 'launchandlevelupstudio@gmail.com',
-      maxMessagesPerDay: 10,
+      maxMessagesPerDay: 6,
       accent: '#B8912F',
       accentLight: '#D9B96A',
       dark: '#0B0B0C',
@@ -2008,7 +2008,7 @@ if (contactForm) {
     inputEl.placeholder = 'Daily message limit reached';
     const notice = document.createElement('div');
     notice.className = 'llu-cap-notice';
-    notice.textContent = `You've reached today's message limit. For more, please request a quote below or email ${cfg.contactEmail} directly — we'll get right back to you.`;
+    notice.textContent = `You've hit today's 6-message limit. Request a quote in chat, or book a call at launchandlevelupstudio.com/contact.html — or email ${cfg.contactEmail}.`;
     messagesEl.appendChild(notice);
     messagesEl.scrollTop = messagesEl.scrollHeight;
   }
