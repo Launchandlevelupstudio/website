@@ -1841,6 +1841,8 @@ if (contactForm) {
     .llu-msg-avatar svg{width:13px;height:13px;}
     .llu-msg{max-width:78%;padding:10px 13px;border-radius:10px;font-size:14px;line-height:1.5;white-space:pre-wrap;}
     .llu-msg.bot{background:#fff;border:1px solid rgba(11,11,12,0.08);color:#0B0B0C;border-bottom-left-radius:3px;}
+    .llu-msg.bot a,.llu-cap-notice a{color:#B8912F;font-weight:600;text-decoration:underline;text-underline-offset:2px;}
+    .llu-msg.bot a:hover,.llu-cap-notice a:hover{color:#8F6F1F;}
     .llu-msg.user{background:${cfg.dark};color:#fff;border-bottom-right-radius:3px;}
 
     .llu-quick-replies{display:flex;flex-wrap:wrap;gap:8px;padding:2px 0 4px 30px;}
@@ -1942,6 +1944,54 @@ if (contactForm) {
     { label: '💬 Something Else', value: 'Something else' },
   ];
 
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function formatBotHtml(text) {
+    let s = escapeHtml(text);
+    s = s.replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g, function (_, label, url) {
+      return '<a href="' + url + '" target="_blank" rel="noopener noreferrer">' + label + '</a>';
+    });
+    s = s.replace(/(^|[^"'>=])(https?:\/\/[^\s<]+)/g, function (_, pre, url) {
+      const clean = url.replace(/[.,);:!?]+$/, '');
+      const trail = url.slice(clean.length);
+      return pre + '<a href="' + clean + '" target="_blank" rel="noopener noreferrer">' + clean + '</a>' + trail;
+    });
+    s = s.replace(/(^|[\s(])((?:www\.)?launchandlevelupstudio\.com\/[^\s<]*)/gi, function (_, pre, path) {
+      const clean = path.replace(/[.,);:!?]+$/, '');
+      const trail = path.slice(clean.length);
+      const href = 'https://' + clean.replace(/^www\./i, '');
+      return pre + '<a href="' + href + '" target="_blank" rel="noopener noreferrer">' + clean + '</a>' + trail;
+    });
+    s = s.replace(/(^|[\s(])([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g, function (_, pre, email) {
+      return pre + '<a href="mailto:' + email + '">' + email + '</a>';
+    });
+    const phrases = [
+      [/\bservices page\b/gi, 'https://launchandlevelupstudio.com/services.html'],
+      [/\bportfolio page\b/gi, 'https://launchandlevelupstudio.com/portfolio.html'],
+      [/\bcontact page\b/gi, 'https://launchandlevelupstudio.com/contact.html'],
+      [/\babout page\b/gi, 'https://launchandlevelupstudio.com/about.html'],
+      [/\bblog page\b/gi, 'https://launchandlevelupstudio.com/blog.html']
+    ];
+    const parts = s.split(/(<a\b[^>]*>.*?<\/a>)/gi);
+    s = parts.map(function (part) {
+      if (/^<a\b/i.test(part)) return part;
+      let out = part;
+      phrases.forEach(function (pair) {
+        out = out.replace(pair[0], function (match) {
+          return '<a href="' + pair[1] + '" target="_blank" rel="noopener noreferrer">' + match + '</a>';
+        });
+      });
+      return out;
+    }).join('');
+    return s;
+  }
+
   function addMessage(role, text) {
     const row = document.createElement('div');
     row.className = 'llu-msg-row ' + (role === 'user' ? 'user' : 'bot');
@@ -1952,7 +2002,11 @@ if (contactForm) {
       : robotSvg('#D9B96A', '#D9B96A');
     const bubble = document.createElement('div');
     bubble.className = 'llu-msg ' + (role === 'user' ? 'user' : 'bot');
-    bubble.textContent = text;
+    if (role === 'user') {
+      bubble.textContent = text;
+    } else {
+      bubble.innerHTML = formatBotHtml(text);
+    }
     row.appendChild(avatar);
     row.appendChild(bubble);
     messagesEl.appendChild(row);
@@ -2008,7 +2062,7 @@ if (contactForm) {
     inputEl.placeholder = 'Daily message limit reached';
     const notice = document.createElement('div');
     notice.className = 'llu-cap-notice';
-    notice.textContent = `You've hit today's 6-message limit. Request a quote in chat, or book a call at launchandlevelupstudio.com/contact.html — or email ${cfg.contactEmail}.`;
+    notice.innerHTML = formatBotHtml(`You've hit today's 6-message limit. Request a quote in chat, or book a call at https://launchandlevelupstudio.com/contact.html — or email ${cfg.contactEmail}.`);
     messagesEl.appendChild(notice);
     messagesEl.scrollTop = messagesEl.scrollHeight;
   }
