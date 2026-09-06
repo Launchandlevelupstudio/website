@@ -1924,9 +1924,55 @@ if (contactForm) {
   const quoteLink = panel.querySelector('.llu-quote-link');
 
   let history = [];
+  let uiLog = [];
   let opened = false;
   let sending = false;
   let conversationStarted = false;
+
+  const HISTORY_KEY = 'llu_chat_thread_v1';
+  const HISTORY_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;
+
+  function persistChat() {
+    try {
+      localStorage.setItem(HISTORY_KEY, JSON.stringify({
+        updatedAt: Date.now(),
+        conversationStarted: conversationStarted,
+        history: history.slice(-40),
+        uiLog: uiLog.slice(-50)
+      }));
+    } catch (e) { /* ignore */ }
+  }
+
+  function loadPersistedChat() {
+    try {
+      const raw = localStorage.getItem(HISTORY_KEY);
+      if (!raw) return null;
+      const data = JSON.parse(raw);
+      if (!data || !Array.isArray(data.uiLog) || !data.uiLog.length) return null;
+      if (Date.now() - (data.updatedAt || 0) > HISTORY_MAX_AGE_MS) {
+        localStorage.removeItem(HISTORY_KEY);
+        return null;
+      }
+      return data;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function restoreChat() {
+    const data = loadPersistedChat();
+    if (!data) return false;
+    history = Array.isArray(data.history) ? data.history.slice() : [];
+    conversationStarted = !!data.conversationStarted;
+    uiLog = [];
+    data.uiLog.forEach(function (m) {
+      const role = m.role === 'user' ? 'user' : 'bot';
+      const text = m.text || m.content || '';
+      if (!text) return;
+      addMessage(role, text, { skipPersist: true });
+    });
+    return messagesEl.children.length > 0;
+  }
 
   const QUICK_REPLIES = [
     { label: '🌐 Website Design', value: 'Website Design' },
@@ -1999,7 +2045,8 @@ if (contactForm) {
     return s;
   }
 
-  function addMessage(role, text) {
+  function addMessage(role, text, opts) {
+    opts = opts || {};
     const row = document.createElement('div');
     row.className = 'llu-msg-row ' + (role === 'user' ? 'user' : 'bot');
     const avatar = document.createElement('div');
@@ -2018,6 +2065,10 @@ if (contactForm) {
     row.appendChild(bubble);
     messagesEl.appendChild(row);
     messagesEl.scrollTop = messagesEl.scrollHeight;
+    if (!opts.skipLog) {
+      uiLog.push({ role: role === 'user' ? 'user' : 'bot', text: String(text) });
+    }
+    if (!opts.skipPersist) persistChat();
     return row;
   }
 
@@ -2053,7 +2104,11 @@ if (contactForm) {
     if (opened) {
       track('chat_opened');
       if (messagesEl.children.length === 0) {
-        showGreeting();
+        if (!restoreChat()) {
+          showGreeting();
+        } else if (!conversationStarted && !messagesEl.querySelector('.llu-quick-replies')) {
+          addQuickReplies();
+        }
         if (capReached()) showCapReached();
       }
       inputEl.focus();
@@ -2088,6 +2143,7 @@ if (contactForm) {
       track('conversation_started', { firstMessage: text });
     }
     history.push({ role: 'user', content: text });
+    persistChat();
 
     const procRow = document.createElement('div');
     procRow.className = 'llu-msg-row bot';
@@ -2106,6 +2162,7 @@ if (contactForm) {
       if (data.reply) {
         addMessage('bot', data.reply);
         history.push({ role: 'assistant', content: data.reply });
+        persistChat();
       } else {
         addMessage('bot', 'Sorry, something went wrong. Please try again or use the contact form.');
       }
