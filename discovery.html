@@ -1294,10 +1294,12 @@ img.hero-watermark{ max-width: min(520px, 70vw); opacity: 0.14; }
 
 .disc-mailto{
   display:inline-flex; align-items:center; justify-content:center; gap:8px;
-  margin-top:10px; padding:12px 18px; background:#B8912F; color:#0B0B0C;
+  margin-top:10px; padding:12px 18px; background:#B8912F; color:#0B0B0C !important;
   font-weight:700; font-size:14px; border-radius:8px; text-decoration:none;
 }
-.disc-mailto:hover{ background:#D9B96A; }
+.disc-bubble a.disc-mailto,
+.disc-bubble.bot a.disc-mailto{ color:#0B0B0C !important; text-decoration:none; }
+.disc-mailto:hover{ background:#D9B96A; color:#0B0B0C !important; }
 
 .visually-hidden{
   position:absolute; width:1px; height:1px; padding:0; margin:-1px;
