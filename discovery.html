@@ -1969,11 +1969,15 @@ if ('IntersectionObserver' in window && staggerEls.length) {
     sendBtn.disabled = !on;
   }
 
-  function askCurrent(noPersistBot) {
+  function currentQuestionText() {
+    const step = steps[stepIndex];
+    if (!step) return '';
+    return typeof step.q === 'function' ? step.q(answers) : step.q;
+  }
+
+  function showCurrentControls() {
     const step = steps[stepIndex];
     if (!step) return;
-    const q = typeof step.q === 'function' ? step.q(answers) : step.q;
-    addBot(q, false, noPersistBot);
     clearChips();
     if (step.type === 'chips') {
       showChips(step.chips);
@@ -1984,6 +1988,13 @@ if ('IntersectionObserver' in window && staggerEls.length) {
     setInputEnabled(true);
     inputEl.focus();
     persist();
+  }
+
+  function askCurrent(noPersistBot) {
+    const step = steps[stepIndex];
+    if (!step) return;
+    addBot(currentQuestionText(), false, noPersistBot);
+    showCurrentControls();
   }
 
   function showMenu() {
@@ -2094,11 +2105,24 @@ if ('IntersectionObserver' in window && staggerEls.length) {
     });
     const first = answers.firstName || 'there';
     const biz = answers.businessName || businessName;
+    const pendingQ = (phase === 'intake') ? currentQuestionText() : '';
+    let alreadyAsked = false;
+    if (pendingQ) {
+      const msgs = save.messages || [];
+      for (let i = msgs.length - 1; i >= 0; i--) {
+        const m = msgs[i];
+        if (!m || m.role !== 'bot' || m.html) continue;
+        const t = String(m.text || '').trim();
+        if (t === String(pendingQ).trim()) { alreadyAsked = true; break; }
+        break; // only inspect latest non-html bot line
+      }
+    }
     addBot('Welcome back, ' + first + '. Resuming ' + biz + '…', false, true);
     skipPersist = false;
 
     if (phase === 'intake') {
-      askCurrent(true);
+      if (alreadyAsked) showCurrentControls();
+      else askCurrent(true);
       return;
     }
     if (phase === 'assets' || phase === 'followup') {
