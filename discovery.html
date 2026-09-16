@@ -1735,6 +1735,9 @@ if ('IntersectionObserver' in window && staggerEls.length) {
 (function () {
   const ACCESS_CODE = '2321';
   const UNLOCK_KEY = 'llu_discovery_unlocked';
+  const SAVES_KEY = 'llu_discovery_saves';
+  const DRAFT_KEY = '_draft';
+  const SAVE_TTL_MS = 14 * 24 * 60 * 60 * 1000;
   const W3_KEY = '14ebd4ce-45fe-46b8-adc1-683fb9c46cdc';
   const STUDIO_EMAIL = 'launchandlevelupstudio@gmail.com';
   const MAX_FOLLOWUPS = 7;
@@ -1751,9 +1754,13 @@ if ('IntersectionObserver' in window && staggerEls.length) {
 
   const answers = {};
   let stepIndex = 0;
-  let phase = 'intake'; // intake | assets | followup | done
+  // menu | resume_ask | intake | assets | followup | done
+  let phase = 'intake';
   let followupCount = 0;
   let busy = false;
+  let submitted = false;
+  let activeSaveKey = DRAFT_KEY;
+  let skipPersist = false;
 
   const steps = [
     { key: 'firstName', q: "Hi — I'm the Launch & Level Up Studio intake bot. What's your first name?", type: 'text' },
@@ -1766,7 +1773,7 @@ if ('IntersectionObserver' in window && staggerEls.length) {
     { key: 'likedSites', q: 'Any sites you like, plus the vibe or feel you want?', type: 'text' },
     { key: 'brandAssets', q: 'Are logo and brand assets ready?', type: 'chips', chips: ['Yes', 'Partial', 'Not yet'] },
     { key: 'timeline', q: "What's your timeline?", type: 'chips', chips: ['ASAP', '2–4 weeks', '1–3 months', 'Exploring'] },
-    { key: 'budget', q: 'Budget range? (optional — pick Prefer not to say if you\'d rather skip)', type: 'chips', chips: ['Under $2k', '$2–5k', '$5–10k', '$10k+', 'Prefer not to say'] },
+    { key: 'budget', q: 'Budget range? (optional — pick Prefer not to say if you\'d rather skip)', type: 'chips', chips: ['Under $2k', '$2–5k', '$5–10k', '$10k+', 'Prefer not to say'] }
   ];
 
   const labels = {
@@ -1780,14 +1787,110 @@ if ('IntersectionObserver' in window && staggerEls.length) {
     likedSites: 'Liked sites + vibe/feel',
     brandAssets: 'Logo/brand assets ready?',
     timeline: 'Timeline',
-    budget: 'Budget',
+    budget: 'Budget'
   };
+
+  function normalizeBiz(name) {
+    return String(name || '').trim().toLowerCase().replace(/\s+/g, ' ');
+  }
+
+  function loadSaves() {
+    try {
+      const raw = localStorage.getItem(SAVES_KEY);
+      const map = raw ? JSON.parse(raw) : {};
+      if (!map || typeof map !== 'object') return {};
+      const now = Date.now();
+      let changed = false;
+      Object.keys(map).forEach(function (k) {
+        const s = map[k];
+        if (!s || !s.updatedAt || (now - s.updatedAt) > SAVE_TTL_MS) {
+          delete map[k];
+          changed = true;
+        }
+      });
+      if (changed) writeSaves(map);
+      return map;
+    } catch (e) {
+      return {};
+    }
+  }
+
+  function writeSaves(map) {
+    try { localStorage.setItem(SAVES_KEY, JSON.stringify(map)); } catch (e) {}
+  }
+
+  function listResumableKeys() {
+    const map = loadSaves();
+    return Object.keys(map).filter(function (k) {
+      return k !== DRAFT_KEY && map[k] && map[k].phase !== 'done';
+    });
+  }
+
+  function captureMessages() {
+    const out = [];
+    messagesEl.querySelectorAll('.disc-row').forEach(function (row) {
+      const bubble = row.querySelector('.disc-bubble');
+      if (!bubble) return;
+      const role = row.classList.contains('user') ? 'user' : 'bot';
+      const isHtml = !!bubble.querySelector('a, br, strong');
+      out.push({
+        role: role,
+        text: isHtml ? bubble.innerHTML : bubble.textContent,
+        html: isHtml
+      });
+    });
+    return out;
+  }
+
+  function persist() {
+    if (skipPersist) return;
+    if (phase === 'menu' || phase === 'resume_ask' || phase === 'done') return;
+    const map = loadSaves();
+    const payload = {
+      answers: Object.assign({}, answers),
+      stepIndex: stepIndex,
+      phase: phase,
+      followupCount: followupCount,
+      submitted: submitted,
+      messages: captureMessages(),
+      updatedAt: Date.now()
+    };
+    let key = activeSaveKey;
+    if (answers.businessName) {
+      const bizKey = normalizeBiz(answers.businessName);
+      if (bizKey) {
+        if (key === DRAFT_KEY && map[DRAFT_KEY]) delete map[DRAFT_KEY];
+        key = bizKey;
+        activeSaveKey = bizKey;
+      }
+    }
+    map[key] = payload;
+    writeSaves(map);
+  }
+
+  function clearSave(key) {
+    if (!key) return;
+    const map = loadSaves();
+    if (map[key]) {
+      delete map[key];
+      writeSaves(map);
+    }
+  }
+
+  function clearAnswers() {
+    Object.keys(answers).forEach(function (k) { delete answers[k]; });
+    stepIndex = 0;
+    phase = 'intake';
+    followupCount = 0;
+    submitted = false;
+    activeSaveKey = DRAFT_KEY;
+  }
 
   function unlock() {
     try { sessionStorage.setItem(UNLOCK_KEY, '1'); } catch (e) {}
     gate.hidden = true;
     chat.hidden = false;
-    startChat();
+    enterChat();
   }
 
   function isUnlocked() {
@@ -1811,7 +1914,7 @@ if ('IntersectionObserver' in window && staggerEls.length) {
     messagesEl.scrollTop = messagesEl.scrollHeight;
   }
 
-  function addBot(text, html) {
+  function addBot(text, html, noPersist) {
     const row = document.createElement('div');
     row.className = 'disc-row bot';
     row.innerHTML = '<div class="disc-avatar"><img src="assets/chatbot-avatar.jpg" alt=""></div>';
@@ -1822,10 +1925,11 @@ if ('IntersectionObserver' in window && staggerEls.length) {
     row.appendChild(bubble);
     messagesEl.appendChild(row);
     scrollMessages();
+    if (!noPersist) persist();
     return bubble;
   }
 
-  function addUser(text) {
+  function addUser(text, noPersist) {
     const row = document.createElement('div');
     row.className = 'disc-row user';
     const bubble = document.createElement('div');
@@ -1834,6 +1938,7 @@ if ('IntersectionObserver' in window && staggerEls.length) {
     row.appendChild(bubble);
     messagesEl.appendChild(row);
     scrollMessages();
+    if (!noPersist) persist();
   }
 
   function clearChips() {
@@ -1841,8 +1946,9 @@ if ('IntersectionObserver' in window && staggerEls.length) {
     chipsEl.hidden = true;
   }
 
-  function showChips(options) {
+  function showChips(options, handler) {
     chipsEl.innerHTML = '';
+    const onPick = handler || function (opt) { handleAnswer(opt); };
     options.forEach(function (opt) {
       const btn = document.createElement('button');
       btn.type = 'button';
@@ -1850,7 +1956,7 @@ if ('IntersectionObserver' in window && staggerEls.length) {
       btn.textContent = opt;
       btn.addEventListener('click', function () {
         if (busy) return;
-        handleAnswer(opt);
+        onPick(opt);
       });
       chipsEl.appendChild(btn);
     });
@@ -1862,11 +1968,11 @@ if ('IntersectionObserver' in window && staggerEls.length) {
     sendBtn.disabled = !on;
   }
 
-  function askCurrent() {
+  function askCurrent(noPersistBot) {
     const step = steps[stepIndex];
     if (!step) return;
     const q = typeof step.q === 'function' ? step.q(answers) : step.q;
-    addBot(q);
+    addBot(q, false, noPersistBot);
     clearChips();
     if (step.type === 'chips') {
       showChips(step.chips);
@@ -1876,14 +1982,138 @@ if ('IntersectionObserver' in window && staggerEls.length) {
     }
     setInputEnabled(true);
     inputEl.focus();
+    persist();
   }
 
-  function startChat() {
+  function showMenu() {
+    phase = 'menu';
     messagesEl.innerHTML = '';
-    stepIndex = 0;
+    clearChips();
+    const keys = listResumableKeys();
+    addBot('Welcome back. Resume a saved questionnaire, or start a new one?', false, true);
+    if (keys.length) {
+      const map = loadSaves();
+      const names = keys.map(function (k) {
+        return (map[k] && map[k].answers && map[k].answers.businessName) || k;
+      });
+      addBot('Saved on this device: ' + names.join(', ') + '.', false, true);
+    }
+    showChips(['Resume', 'Start new'], handleMenuChoice);
+    setInputEnabled(false);
+  }
+
+  function startFresh() {
+    skipPersist = true;
+    clearAnswers();
+    clearSave(DRAFT_KEY);
+    messagesEl.innerHTML = '';
     phase = 'intake';
-    followupCount = 0;
+    skipPersist = false;
     askCurrent();
+  }
+
+  function enterChat() {
+    const keys = listResumableKeys();
+    const map = loadSaves();
+    if (keys.length || map[DRAFT_KEY]) showMenu();
+    else startFresh();
+  }
+
+  function handleMenuChoice(choice) {
+    if (busy) return;
+    clearChips();
+    addUser(choice, true);
+    if (/start/i.test(choice)) {
+      startFresh();
+      return;
+    }
+    phase = 'resume_ask';
+    addBot("What's the business name you used before?", false, true);
+    setInputEnabled(true);
+    inputEl.placeholder = 'Business name…';
+    inputEl.focus();
+  }
+
+  function findSave(businessName) {
+    const key = normalizeBiz(businessName);
+    const map = loadSaves();
+    if (map[key]) return { key: key, save: map[key] };
+    let found = null;
+    Object.keys(map).forEach(function (k) {
+      if (found || k === DRAFT_KEY) return;
+      const bn = normalizeBiz((map[k].answers && map[k].answers.businessName) || '');
+      if (bn && bn === key) found = { key: k, save: map[k] };
+    });
+    return found;
+  }
+
+  function showAssetsPrompt() {
+    const assetsHtml =
+      'Please don\'t leave without sending logo, photos, and work samples for the site.<br><br>' +
+      '<strong>Label every file</strong> before you attach it — e.g. Logo, Hero photos, Team, Product shots, Work samples, Inspiration — so we know what each asset is for.<br><br>' +
+      'Use the button below; the email opens with a checklist you can fill in.<br><br>' +
+      '<a class="disc-mailto" href="' + mailtoHref() + '">Email assets to the studio</a>';
+    addBot(assetsHtml, true);
+  }
+
+  function tryResume(businessName) {
+    const hit = findSave(businessName);
+    if (!hit) {
+      addBot("I couldn't find a save for that business name on this device.", false, true);
+      addBot('Try again, or start a new questionnaire.', false, true);
+      phase = 'menu';
+      showChips(['Try again', 'Start new'], function (c) {
+        clearChips();
+        addUser(c, true);
+        if (/start/i.test(c)) startFresh();
+        else {
+          phase = 'resume_ask';
+          addBot("What's the business name you used before?", false, true);
+          setInputEnabled(true);
+          inputEl.focus();
+        }
+      });
+      setInputEnabled(false);
+      return;
+    }
+
+    const save = hit.save;
+    skipPersist = true;
+    clearAnswers();
+    Object.assign(answers, save.answers || {});
+    stepIndex = typeof save.stepIndex === 'number' ? save.stepIndex : 0;
+    phase = save.phase || 'intake';
+    followupCount = save.followupCount || 0;
+    submitted = !!save.submitted;
+    activeSaveKey = normalizeBiz(answers.businessName) || hit.key;
+    messagesEl.innerHTML = '';
+    (save.messages || []).forEach(function (m) {
+      if (m.role === 'user') addUser(m.text, true);
+      else addBot(m.text, !!m.html, true);
+    });
+    const first = answers.firstName || 'there';
+    const biz = answers.businessName || businessName;
+    addBot('Welcome back, ' + first + '. Resuming ' + biz + '…', false, true);
+    skipPersist = false;
+
+    if (phase === 'intake') {
+      askCurrent(true);
+      return;
+    }
+    if (phase === 'assets' || phase === 'followup') {
+      if (!messagesEl.querySelector('a.disc-mailto')) showAssetsPrompt();
+      phase = 'followup';
+      const left = Math.max(0, MAX_FOLLOWUPS - followupCount);
+      addBot(left
+        ? ('Any questions before we connect you with Daniel? You can ask up to ' + left + ' more. Type done when you\'re finished.')
+        : 'Type done when you\'re ready to wrap up.');
+      setInputEnabled(true);
+      inputEl.placeholder = 'Ask a question or type done…';
+      inputEl.focus();
+      persist();
+      return;
+    }
+    handoff();
   }
 
   function formatMessageBody() {
@@ -1904,7 +2134,6 @@ if ('IntersectionObserver' in window && staggerEls.length) {
     fd.append('replyto', answers.email || '');
     fd.append('message', formatMessageBody());
     fd.append('botcheck', '');
-    // also send named fields for inbox readability
     Object.keys(labels).forEach(function (k) {
       fd.append(k, answers[k] || '');
     });
@@ -1945,19 +2174,17 @@ if ('IntersectionObserver' in window && staggerEls.length) {
 
   async function afterIntake() {
     phase = 'assets';
+    persist();
     const ok = await submitWeb3();
     const name = answers.firstName || 'there';
     if (!ok) {
       addBot('Thanks, ' + name + '. We couldn\'t auto-send the form — please email ' + STUDIO_EMAIL + ' with your answers if you can. Continuing with next steps.');
     } else {
+      submitted = true;
       addBot('Thanks, ' + name + ' — your answers are in.');
+      persist();
     }
-    const assetsHtml =
-      'Please don\'t leave without sending logo, photos, and work samples for the site.<br><br>' +
-      '<strong>Label every file</strong> before you attach it — e.g. Logo, Hero photos, Team, Product shots, Work samples, Inspiration — so we know what each asset is for.<br><br>' +
-      'Use the button below; the email opens with a checklist you can fill in.<br><br>' +
-      '<a class="disc-mailto" href="' + mailtoHref() + '">Email assets to the studio</a>';
-    addBot(assetsHtml, true);
+    showAssetsPrompt();
 
     setTimeout(function () {
       phase = 'followup';
@@ -1965,6 +2192,7 @@ if ('IntersectionObserver' in window && staggerEls.length) {
       setInputEnabled(true);
       inputEl.placeholder = 'Ask a question or type done…';
       inputEl.focus();
+      persist();
     }, 400);
   }
 
@@ -1992,7 +2220,9 @@ if ('IntersectionObserver' in window && staggerEls.length) {
     phase = 'done';
     clearChips();
     setInputEnabled(false);
-    addBot('You\'ll discuss next steps with Daniel. Reach us anytime at ' + STUDIO_EMAIL + ' or https://launchandlevelupstudio.com/contact.html — thanks for filling this out.');
+    addBot('You\'ll discuss next steps with Daniel. Reach us anytime at ' + STUDIO_EMAIL + ' or https://launchandlevelupstudio.com/contact.html — thanks for filling this out.', false, true);
+    if (answers.businessName) clearSave(normalizeBiz(answers.businessName));
+    clearSave(DRAFT_KEY);
   }
 
   function isDonePhrase(text) {
@@ -2006,6 +2236,21 @@ if ('IntersectionObserver' in window && staggerEls.length) {
     busy = true;
     setInputEnabled(false);
     clearChips();
+
+    if (phase === 'menu') {
+      busy = false;
+      handleMenuChoice(text);
+      return;
+    }
+
+    if (phase === 'resume_ask') {
+      addUser(text, true);
+      inputEl.value = '';
+      tryResume(text);
+      busy = false;
+      return;
+    }
+
     addUser(text);
     inputEl.value = '';
 
@@ -2021,7 +2266,11 @@ if ('IntersectionObserver' in window && staggerEls.length) {
         }
       }
       answers[step.key] = text;
+      if (step.key === 'businessName') {
+        activeSaveKey = normalizeBiz(text) || DRAFT_KEY;
+      }
       stepIndex += 1;
+      persist();
       if (stepIndex >= steps.length) {
         await afterIntake();
         busy = false;
@@ -2032,7 +2281,8 @@ if ('IntersectionObserver' in window && staggerEls.length) {
       return;
     }
 
-    if (phase === 'followup') {
+    if (phase === 'followup' || phase === 'assets') {
+      if (phase === 'assets') phase = 'followup';
       if (isDonePhrase(text)) {
         handoff();
         busy = false;
@@ -2048,6 +2298,7 @@ if ('IntersectionObserver' in window && staggerEls.length) {
         addBot(left === 1 ? 'You have 1 question left, or type done.' : 'You have ' + left + ' questions left, or type done.');
         setInputEnabled(true);
         inputEl.focus();
+        persist();
       }
       busy = false;
       return;
@@ -2068,13 +2319,13 @@ if ('IntersectionObserver' in window && staggerEls.length) {
     }
   });
 
-  if (isUnlocked()) {
-    unlock();
-  } else {
-    codeInput.focus();
-  }
+  loadSaves();
+
+  if (isUnlocked()) unlock();
+  else codeInput.focus();
 })();
 </script>
+
 
 </body>
 </html>
