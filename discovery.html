@@ -1736,7 +1736,7 @@ if ('IntersectionObserver' in window && staggerEls.length) {
 (function () {
   const ACCESS_CODE = '2321';
   const UNLOCK_KEY = 'llu_discovery_unlocked';
-  const SAVES_KEY = 'llu_discovery_saves';
+  const SAVES_KEY = 'llu_discovery_saves_v2';
   const DRAFT_KEY = '_draft';
   const SAVE_TTL_MS = 14 * 24 * 60 * 60 * 1000;
   const W3_KEY = '14ebd4ce-45fe-46b8-adc1-683fb9c46cdc';
@@ -1762,33 +1762,126 @@ if ('IntersectionObserver' in window && staggerEls.length) {
   let submitted = false;
   let activeSaveKey = DRAFT_KEY;
   let skipPersist = false;
+  let lastSectionIntro = null;
 
+  // Full client brief. Opening: firstName → businessName → email, then Sections 1–7.
+  // sectionIntro: shown once before the question when entering that section.
+  // optional: adds a Skip chip.
+  // skipIf: function(answers) → skip this step.
+  // sectionGate: chips Answer these / Skip section; stores skip flag on key.
+  // chipsExtra: chips shown alongside text/email input (e.g. Same as reply email).
   const steps = [
     { key: 'firstName', q: "Hi — I'm the Launch & Level Up Studio intake bot. What's your first name?", type: 'text' },
     { key: 'businessName', q: function (a) { return 'Nice to meet you, ' + a.firstName + '. What\'s the business name?'; }, type: 'text' },
-    { key: 'email', q: "What's the best email to reach you at?", type: 'email' },
-    { key: 'whatBusinessDoes', q: 'What does the business do?', type: 'text' },
-    { key: 'idealCustomer', q: 'Who is the ideal customer?', type: 'text' },
-    { key: 'mainGoal', q: "What's the main goal for the site?", type: 'text' },
-    { key: 'mustHavePages', q: 'Which pages are must-haves? (e.g. Home, About, Services, Contact, Blog)', type: 'text' },
-    { key: 'likedSites', q: 'Any sites you like, plus the vibe or feel you want?', type: 'text' },
-    { key: 'brandAssets', q: 'Are logo and brand assets ready?', type: 'chips', chips: ['Yes', 'Partial', 'Not yet'] },
-    { key: 'timeline', q: "What's your timeline?", type: 'chips', chips: ['ASAP', '2–4 weeks', '1–3 months', 'Exploring'] },
-    { key: 'budget', q: 'Budget range? (optional — pick Prefer not to say if you\'d rather skip)', type: 'chips', chips: ['Under $2k', '$2–5k', '$5–10k', '$10k+', 'Prefer not to say'] }
+    { key: 'email', q: "What's the best email to reach you at? (We'll use this for replies.)", type: 'email' },
+
+    // Section 1 — Business Fundamentals
+    { key: 'whatBusinessDoes', q: 'What does your business do, in one sentence?', type: 'text', sectionIntro: 'Section 1 of 7 — Business Fundamentals' },
+    { key: 'yearsInBusiness', q: 'How long have you been in business?', type: 'text' },
+    { key: 'existingWebsite', q: 'Do you have an existing website? (Paste the URL, or type "no".)', type: 'text' },
+    { key: 'existingLogo', q: 'Do you have an existing logo?', type: 'chips', chips: ['Yes, I\'ll email it', 'No'] },
+    { key: 'serviceArea', q: 'Business address / service area?', type: 'text' },
+    { key: 'publicPhone', q: 'Public phone number for the site?', type: 'text' },
+    { key: 'publicEmail', q: 'Public email to show on the site?', type: 'email', chipsExtra: ['Same as my reply email'] },
+
+    // Section 2 — Audience & Positioning
+    { key: 'idealCustomer', q: 'Who is your ideal customer?', type: 'text', sectionIntro: 'Section 2 of 7 — Audience & Positioning' },
+    { key: 'mainProblem', q: 'What main problem do you solve for them?', type: 'text' },
+    { key: 'differentiator', q: 'What makes you different from alternatives?', type: 'text' },
+    { key: 'primaryAction', q: 'What should visitors do first on the site?', type: 'chips', chips: ['Call', 'Book an appointment', 'Buy something', 'Send a message', 'Fill out a form'] },
+    { key: 'notFor', q: 'Who is this NOT for? (optional)', type: 'text', optional: true },
+
+    // Section 3 — Brand & Visual Direction
+    { key: 'feelWords', q: 'What 3–5 words should the brand feel like?', type: 'text', sectionIntro: 'Section 3 of 7 — Brand & Visual Direction' },
+    { key: 'likedSites', q: 'Any sites you like (and why)?', type: 'text' },
+    { key: 'dislikedSites', q: 'Any sites or styles you dislike? (optional)', type: 'text', optional: true },
+    { key: 'preferredColors', q: 'Preferred colors?', type: 'text' },
+    { key: 'avoidColors', q: 'Colors to avoid? (optional)', type: 'text', optional: true },
+    { key: 'brandFonts', q: 'Do you have brand fonts?', type: 'chips', chips: ['Yes, I\'ll specify', 'No, open to recommendations'] },
+    { key: 'hasPhotos', q: 'Do you have photos we can use?', type: 'chips', chips: ['Yes, I\'ll email them', 'No'] },
+    { key: 'stockOrAi', q: 'Are you open to stock or AI imagery if needed?', type: 'chips', chips: ['Yes', 'No, I\'ll source my own', 'Not sure'] },
+
+    // Section 4 — Content & Structure
+    { key: 'neededPages', q: 'Which pages do you need? (e.g. Home, About, Services, Pricing, Portfolio/Work, Blog, Contact)', type: 'text', sectionIntro: 'Section 4 of 7 — Content & Structure' },
+    { key: 'servicesProducts', q: 'List each service/product: name, description, price, and what\'s included.', type: 'text' },
+    { key: 'aboutStoryStatus', q: 'Do you already have an About story written?', type: 'chips', chips: ['Yes, I\'ll paste it below', 'No, help me draft it'] },
+    { key: 'aboutStory', q: 'Paste your About story below.', type: 'text', optional: true, skipIf: function (a) { return !/^yes/i.test(String(a.aboutStoryStatus || '')); } },
+    { key: 'credentials', q: 'Credentials, certifications, or awards? (optional)', type: 'text', optional: true },
+    { key: 'testimonials', q: 'Paste testimonials, or type "none yet".', type: 'text' },
+    { key: 'socialHandles', q: 'Social handles / profile links?', type: 'text' },
+    { key: 'legalCompliance', q: 'Any legal or compliance needs (HIPAA, disclaimers, etc.)? (optional)', type: 'text', optional: true },
+
+    // Section 5 — Lead Capture & Booking (optional section)
+    { key: '_section5', q: 'Next is Lead Capture & Booking. Answer these, or skip the section?', type: 'chips', chips: ['Answer these', 'Skip section'], sectionIntro: 'Section 5 of 7 — Lead Capture & Booking', sectionGate: true },
+    { key: 'currentCustomers', q: 'How do customers find you today?', type: 'text', skipIf: function (a) { return a._section5 === 'Skip section'; } },
+    { key: 'wantBooking', q: 'Do you want online booking?', type: 'chips', chips: ['Yes', 'No', 'Not sure'], skipIf: function (a) { return a._section5 === 'Skip section'; } },
+    { key: 'bookingTool', q: 'What booking tool do you use (or want)?', type: 'text', optional: true, skipIf: function (a) { return a._section5 === 'Skip section' || !/^yes$/i.test(String(a.wantBooking || '')); } },
+    { key: 'formNotify', q: 'How should we notify you of form submissions?', type: 'chips', chips: ['Email', 'Text', 'Both'], skipIf: function (a) { return a._section5 === 'Skip section'; } },
+    { key: 'wantNewsletter', q: 'Do you want a newsletter signup?', type: 'chips', chips: ['Yes', 'No'], skipIf: function (a) { return a._section5 === 'Skip section'; } },
+
+    // Section 6 — Technical & Domain (optional section)
+    { key: '_section6', q: 'Next is Technical & Domain. Answer these, or skip the section?', type: 'chips', chips: ['Answer these', 'Skip section'], sectionIntro: 'Section 6 of 7 — Technical & Domain', sectionGate: true },
+    { key: 'ownDomain', q: 'Do you already own a domain?', type: 'chips', chips: ['Yes', 'No, need help buying one'], skipIf: function (a) { return a._section6 === 'Skip section'; } },
+    { key: 'domainDetails', q: 'What\'s the domain, and where is it registered?', type: 'text', skipIf: function (a) { return a._section6 === 'Skip section' || !/^yes$/i.test(String(a.ownDomain || '')); } },
+    { key: 'domainEmail', q: 'Do you need email on that domain?', type: 'chips', chips: ['Yes', 'No, need that set up'], skipIf: function (a) { return a._section6 === 'Skip section'; } },
+    { key: 'otherTools', q: 'Any other tools we should connect (CRM, analytics, etc.)? (optional)', type: 'text', optional: true, skipIf: function (a) { return a._section6 === 'Skip section'; } },
+
+    // Section 7 — Logistics (optional section)
+    { key: '_section7', q: 'Last section: Logistics. Answer these, or skip the section?', type: 'chips', chips: ['Answer these', 'Skip section'], sectionIntro: 'Section 7 of 7 — Logistics', sectionGate: true },
+    { key: 'launchDate', q: 'Target launch date?', type: 'text', skipIf: function (a) { return a._section7 === 'Skip section'; } },
+    { key: 'finalApprover', q: 'Who gives final approval?', type: 'text', skipIf: function (a) { return a._section7 === 'Skip section'; } },
+    { key: 'bestContact', q: 'Best way / times to reach you?', type: 'text', skipIf: function (a) { return a._section7 === 'Skip section'; } },
+    { key: 'anythingElse', q: 'Anything else we should know? (optional)', type: 'text', optional: true, skipIf: function (a) { return a._section7 === 'Skip section'; } }
   ];
 
   const labels = {
     firstName: 'First name',
     businessName: 'Business name',
-    email: 'Email',
-    whatBusinessDoes: 'What does the business do?',
-    idealCustomer: 'Who is the ideal customer?',
-    mainGoal: "What's the main goal for the site?",
-    mustHavePages: 'Must-have pages',
-    likedSites: 'Liked sites + vibe/feel',
-    brandAssets: 'Logo/brand assets ready?',
-    timeline: 'Timeline',
-    budget: 'Budget'
+    email: 'Reply email',
+    whatBusinessDoes: 'What the business does',
+    yearsInBusiness: 'Years in business',
+    existingWebsite: 'Existing website',
+    existingLogo: 'Existing logo',
+    serviceArea: 'Business address / service area',
+    publicPhone: 'Public phone',
+    publicEmail: 'Public email',
+    idealCustomer: 'Ideal customer',
+    mainProblem: 'Main problem solved',
+    differentiator: 'Differentiator',
+    primaryAction: 'Primary action',
+    notFor: 'Not for',
+    feelWords: 'Brand feel words',
+    likedSites: 'Liked sites',
+    dislikedSites: 'Disliked sites / styles',
+    preferredColors: 'Preferred colors',
+    avoidColors: 'Colors to avoid',
+    brandFonts: 'Brand fonts',
+    hasPhotos: 'Has photos',
+    stockOrAi: 'Open to stock / AI imagery',
+    neededPages: 'Needed pages',
+    servicesProducts: 'Services / products',
+    aboutStoryStatus: 'About story status',
+    aboutStory: 'About story',
+    credentials: 'Credentials / awards',
+    testimonials: 'Testimonials',
+    socialHandles: 'Social handles',
+    legalCompliance: 'Legal / compliance',
+    _section5: 'Section 5 — Lead Capture & Booking',
+    currentCustomers: 'How customers find you',
+    wantBooking: 'Wants online booking',
+    bookingTool: 'Booking tool',
+    formNotify: 'Form notification preference',
+    wantNewsletter: 'Wants newsletter signup',
+    _section6: 'Section 6 — Technical & Domain',
+    ownDomain: 'Owns domain',
+    domainDetails: 'Domain details',
+    domainEmail: 'Domain email',
+    otherTools: 'Other tools to connect',
+    _section7: 'Section 7 — Logistics',
+    launchDate: 'Target launch date',
+    finalApprover: 'Final approver',
+    bestContact: 'Best contact method / times',
+    anythingElse: 'Anything else'
   };
 
   function normalizeBiz(name) {
@@ -1885,6 +1978,7 @@ if ('IntersectionObserver' in window && staggerEls.length) {
     followupCount = 0;
     submitted = false;
     activeSaveKey = DRAFT_KEY;
+    lastSectionIntro = null;
   }
 
   function unlock() {
@@ -1969,6 +2063,35 @@ if ('IntersectionObserver' in window && staggerEls.length) {
     sendBtn.disabled = !on;
   }
 
+  function shouldSkipStep(step) {
+    if (!step) return true;
+    if (typeof step.skipIf === 'function') {
+      try { return !!step.skipIf(answers); } catch (e) { return false; }
+    }
+    return false;
+  }
+
+  function advanceToNextAskable(fromIndex) {
+    let i = typeof fromIndex === 'number' ? fromIndex : stepIndex;
+    while (i < steps.length && shouldSkipStep(steps[i])) {
+      const skipped = steps[i];
+      if (skipped && skipped.key && answers[skipped.key] === undefined) {
+        answers[skipped.key] = '—';
+      }
+      i += 1;
+    }
+    stepIndex = i;
+    return i < steps.length;
+  }
+
+  function progressLabel() {
+    const answered = Object.keys(answers).filter(function (k) {
+      return !k.startsWith('_') && answers[k] && answers[k] !== '—';
+    }).length;
+    const total = Object.keys(labels).filter(function (k) { return !k.startsWith('_'); }).length;
+    return '(' + Math.min(answered + 1, total) + '/' + total + ')';
+  }
+
   function currentQuestionText() {
     const step = steps[stepIndex];
     if (!step) return '';
@@ -1979,20 +2102,49 @@ if ('IntersectionObserver' in window && staggerEls.length) {
     const step = steps[stepIndex];
     if (!step) return;
     clearChips();
-    if (step.type === 'chips') {
-      showChips(step.chips);
-      inputEl.placeholder = 'Or type your answer…';
+    const chipList = [];
+    if (step.type === 'chips' && step.chips) {
+      step.chips.forEach(function (c) { chipList.push(c); });
+    }
+    if (step.chipsExtra && step.chipsExtra.length) {
+      step.chipsExtra.forEach(function (c) { chipList.push(c); });
+    }
+    if (step.optional) chipList.push('Skip');
+    if (chipList.length) showChips(chipList);
+
+    if (step.type === 'chips' && !step.chipsExtra && !step.optional) {
+      inputEl.placeholder = 'Or type your answer… ' + progressLabel();
+    } else if (step.type === 'email') {
+      inputEl.placeholder = 'you@example.com ' + progressLabel();
     } else {
-      inputEl.placeholder = step.type === 'email' ? 'you@example.com' : 'Type your answer…';
+      inputEl.placeholder = 'Type your answer… ' + progressLabel();
     }
     setInputEnabled(true);
     inputEl.focus();
     persist();
   }
 
-  function askCurrent(noPersistBot) {
+  function maybeSectionIntro(noPersistBot) {
     const step = steps[stepIndex];
-    if (!step) return;
+    if (!step || !step.sectionIntro) return;
+    if (lastSectionIntro === step.sectionIntro) return;
+    // Avoid re-introducing if the intro line is already the latest bot message
+    const rows = messagesEl.querySelectorAll('.disc-row.bot .disc-bubble');
+    const last = rows.length ? rows[rows.length - 1] : null;
+    if (last && !last.querySelector('a') && String(last.textContent || '').trim() === step.sectionIntro) {
+      lastSectionIntro = step.sectionIntro;
+      return;
+    }
+    addBot(step.sectionIntro, false, noPersistBot);
+    lastSectionIntro = step.sectionIntro;
+  }
+
+  function askCurrent(noPersistBot) {
+    if (!advanceToNextAskable(stepIndex)) {
+      afterIntake();
+      return;
+    }
+    maybeSectionIntro(noPersistBot);
     addBot(currentQuestionText(), false, noPersistBot);
     showCurrentControls();
   }
@@ -2059,6 +2211,23 @@ if ('IntersectionObserver' in window && staggerEls.length) {
     return found;
   }
 
+  function mailtoHref() {
+    const first = answers.firstName || '';
+    const biz = answers.businessName || '';
+    const subject = 'Assets for ' + first + ' from ' + biz;
+    const body =
+      'Hi Launch & Level Up Studio,\n\n' +
+      'Please find my site assets attached. I labeled each file (logo, hero photos, team, product shots, work samples, inspiration).\n\n' +
+      'Checklist:\n' +
+      'Logo:\n' +
+      'Photos of work/products:\n' +
+      'Headshots/team:\n' +
+      'Inspiration / sites you like:\n' +
+      'Anything else:\n\n' +
+      'Thanks,\n' + first;
+    return 'mailto:' + STUDIO_EMAIL + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+  }
+
   function showAssetsPrompt() {
     const assetsHtml =
       'Please don\'t leave without sending logo, photos, and work samples for the site.<br><br>' +
@@ -2105,6 +2274,7 @@ if ('IntersectionObserver' in window && staggerEls.length) {
     });
     const first = answers.firstName || 'there';
     const biz = answers.businessName || businessName;
+    advanceToNextAskable(stepIndex);
     const pendingQ = (phase === 'intake') ? currentQuestionText() : '';
     let alreadyAsked = false;
     if (pendingQ) {
@@ -2178,23 +2348,6 @@ if ('IntersectionObserver' in window && staggerEls.length) {
       ok = false;
     }
     return ok;
-  }
-
-  function mailtoHref() {
-    const first = answers.firstName || '';
-    const biz = answers.businessName || '';
-    const subject = 'Assets for ' + first + ' from ' + biz;
-    const body =
-      'Hi Launch & Level Up Studio,\n\n' +
-      'Please find my site assets attached. I labeled each file (logo, hero photos, team, product shots, work samples, inspiration).\n\n' +
-      'Checklist:\n' +
-      'Logo:\n' +
-      'Photos of work/products:\n' +
-      'Headshots/team:\n' +
-      'Inspiration / sites you like:\n' +
-      'Anything else:\n\n' +
-      'Thanks,\n' + first;
-    return 'mailto:' + STUDIO_EMAIL + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
   }
 
   async function afterIntake() {
@@ -2281,22 +2434,40 @@ if ('IntersectionObserver' in window && staggerEls.length) {
 
     if (phase === 'intake') {
       const step = steps[stepIndex];
-      if (step.type === 'email') {
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(text)) {
-          addBot('That doesn\'t look like an email. Please enter a valid email address.');
+      if (!step) {
+        await afterIntake();
+        busy = false;
+        return;
+      }
+
+      let value = text;
+
+      // Chip helpers
+      if (step.chipsExtra && step.chipsExtra.indexOf(text) !== -1 && /same as my reply email/i.test(text)) {
+        value = answers.email || text;
+      }
+      if (step.optional && /^skip$/i.test(text)) {
+        value = '—';
+      }
+
+      if (step.type === 'email' && value !== '—' && !/^same as/i.test(text)) {
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+          addBot('That doesn\'t look like an email. Please enter a valid email address, or choose "Same as my reply email".');
           setInputEnabled(true);
           busy = false;
-          inputEl.focus();
+          showCurrentControls();
           return;
         }
       }
-      answers[step.key] = text;
+
+      answers[step.key] = value;
       if (step.key === 'businessName') {
-        activeSaveKey = normalizeBiz(text) || DRAFT_KEY;
+        activeSaveKey = normalizeBiz(value) || DRAFT_KEY;
       }
       stepIndex += 1;
       persist();
-      if (stepIndex >= steps.length) {
+
+      if (!advanceToNextAskable(stepIndex)) {
         await afterIntake();
         busy = false;
         return;
@@ -2350,6 +2521,7 @@ if ('IntersectionObserver' in window && staggerEls.length) {
   else codeInput.focus();
 })();
 </script>
+
 
 </body>
 </html>
