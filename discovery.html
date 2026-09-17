@@ -2217,11 +2217,12 @@ if ('IntersectionObserver' in window && staggerEls.length) {
     const subject = 'Assets for ' + first + ' from ' + biz;
     const body =
       'Hi Launch & Level Up Studio,\n\n' +
-      'Please find my site assets attached. I labeled each file (logo, hero photos, team, product shots, work samples, inspiration).\n\n' +
+      'Please find my site assets attached. I labeled each file (logo, hero photos, team, product shots, work samples, stock photos, inspiration).\n\n' +
       'Checklist:\n' +
       'Logo:\n' +
       'Photos of work/products:\n' +
       'Headshots/team:\n' +
+      'Stock photos (if any):\n' +
       'Inspiration / sites you like:\n' +
       'Anything else:\n\n' +
       'Thanks,\n' + first;
@@ -2231,7 +2232,8 @@ if ('IntersectionObserver' in window && staggerEls.length) {
   function showAssetsPrompt() {
     const assetsHtml =
       'Please don\'t leave without sending logo, photos, and work samples for the site.<br><br>' +
-      '<strong>Label every file</strong> before you attach it — e.g. Logo, Hero photos, Team, Product shots, Work samples, Inspiration — so we know what each asset is for.<br><br>' +
+      '<strong>Label every file</strong> before you attach it — e.g. Logo, Hero photos, Team, Product shots, Work samples, Stock photos, Inspiration — so we know what each asset is for.<br><br>' +
+      'If you have stock photos you want on the site, include those too and mark them as Stock.<br><br>' +
       'Use the button below; the email opens with a checklist you can fill in.<br><br>' +
       '<a class="disc-mailto" href="' + mailtoHref() + '">Email assets to the studio</a>';
     addBot(assetsHtml, true);
@@ -2386,7 +2388,7 @@ if ('IntersectionObserver' in window && staggerEls.length) {
       return 'Our process is Discover → Design → Launch. We clarify goals and content, design and iterate, then build, review, and go live with handoff.';
     }
     if (/send|asset|logo|photo|file|attach|material/.test(t)) {
-      return 'Send logo files, brand colors/fonts if you have them, photos of your work or space, and any copy drafts. Label every file (logo, hero, team, products, samples, inspiration). Use the assets email button above or write ' + STUDIO_EMAIL + '.';
+      return 'Send logo files, brand colors/fonts if you have them, photos of your work or space, stock photos you want used, and any copy drafts. Label every file (logo, hero, team, products, samples, stock, inspiration). Use the assets email button above or write ' + STUDIO_EMAIL + '.';
     }
     if (/contact|email|reach|daniel|call|phone|book/.test(t)) {
       return 'Email ' + STUDIO_EMAIL + ' or use the contact page: https://launchandlevelupstudio.com/contact.html — Daniel will follow up from there.';
