@@ -3,13 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Discovery — Launch & Level Up Studio</title>
-<meta name="robots" content="noindex,nofollow">
-<link rel="canonical" href="https://launchandlevelupstudio.com/discovery.html">
+<title>Free Analyzer — Launch &amp; Level Up Studio</title>
+<meta name="description" content="Free business opportunity analyzer from Launch &amp; Level Up Studio — get a leak score and a starting estimate for missed calls, websites, follow-up, and more.">
+<link rel="canonical" href="https://launchandlevelupstudio.com/analyzer.html">
+<meta property="og:title" content="Free Analyzer — Launch &amp; Level Up Studio">
+<meta property="og:description" content="Free business opportunity analyzer from Launch &amp; Level Up Studio — get a leak score and a starting estimate.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://launchandlevelupstudio.com/analyzer.html">
+<meta property="og:image" content="https://launchandlevelupstudio.com/assets/logo.png">
+<meta property="og:site_name" content="Launch &amp; Level Up Studio">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Free Analyzer — Launch &amp; Level Up Studio">
+<meta name="twitter:description" content="Free business opportunity analyzer from Launch &amp; Level Up Studio — get a leak score and a starting estimate.">
+<meta name="twitter:image" content="https://launchandlevelupstudio.com/assets/logo.png">
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 <link rel="apple-touch-icon" href="assets/favicon.png">
-<meta name="description" content="Client discovery questionnaire for Launch & Level Up Studio.">
 
 <style>
 /* ==========================================================================
@@ -1143,6 +1152,12 @@ a.blog-card:hover .more svg{ transform: translateX(4px); }
 .article-cta p{ margin-top: 10px; color: var(--charcoal-2); }
 .article-cta .btn{ margin-top: 18px; }
 
+/* Keep floating chat from covering contact submit on phones */
+@media (max-width: 700px) {
+  #contact-form, form#contact-form { padding-bottom: 96px; }
+  .llu-chat-btn { bottom: 16px; right: 16px; width: 56px; height: 56px; }
+}
+
 .blog-card-image{
   aspect-ratio: 16/8;
   background: linear-gradient(150deg, var(--charcoal), var(--ink));
@@ -1159,6 +1174,13 @@ a.blog-card:hover .more svg{ transform: translateX(4px); }
   object-fit: contain;
 }
 img.hero-watermark{ max-width: min(520px, 70vw); opacity: 0.14; }
+.llu-chat-btn img.llu-chat-avatar{
+  width: 40px; height: 40px; border-radius: 50%; object-fit: cover;
+  display: block; pointer-events: none;
+}
+.llu-chat-header-icon img{
+  width: 22px; height: 22px; border-radius: 50%; object-fit: cover; display:block;
+}
 
 /* Audit fixes: pricing cards + hero CTA tap targets */
 @media (max-width: 640px){
@@ -1189,128 +1211,6 @@ img.hero-watermark{ max-width: min(520px, 70vw); opacity: 0.14; }
   .hero-actions .btn{ width: 100%; justify-content: center; min-height: 48px; }
 }
 
-/* Discovery page */
-.discovery-section{ padding: clamp(40px, 6vw, 72px) 0 clamp(64px, 8vw, 100px); }
-.discovery-gate{
-  max-width: 440px; margin: 0 auto;
-  background: #fff; border: 1px solid rgba(11,11,12,0.1);
-  padding: clamp(28px, 4vw, 40px);
-  box-shadow: 0 24px 50px -28px rgba(11,11,12,0.28);
-}
-.discovery-gate h2{ font-size: 1.55rem; margin-bottom: 10px; }
-.discovery-gate > p{ color: var(--charcoal-2); font-size: 15px; margin: 0 0 24px; }
-.gate-form label{ display:block; font-size: 13px; font-weight: 700; letter-spacing: 0.03em; margin-bottom: 8px; }
-.gate-form input{
-  width: 100%; padding: 12px 14px; font-size: 16px; font-family: inherit;
-  border: 1px solid rgba(11,11,12,0.18); border-radius: 2px; margin-bottom: 14px;
-  letter-spacing: 0.12em;
-}
-.gate-form input:focus{ border-color: var(--gold); outline: none; }
-.gate-error{ color: #a33; font-size: 14px; margin: -4px 0 14px; }
-.gate-form .btn{ width: 100%; justify-content: center; }
-
-.discovery-chat{
-  max-width: 640px; margin: 0 auto;
-  background: #fff; border-radius: 14px; overflow: hidden;
-  box-shadow: 0 30px 70px -24px rgba(0,0,0,0.35);
-  border: 1px solid rgba(11,11,12,0.08);
-  display: flex; flex-direction: column;
-  min-height: min(70vh, 620px); max-height: 78vh;
-}
-.disc-header{
-  background: linear-gradient(135deg,#16161a,#0B0B0C); color:#fff;
-  padding: 16px 18px; display:flex; align-items:center; gap:12px; flex-shrink:0;
-  position: relative; overflow: hidden;
-}
-.disc-header::after{
-  content:""; position:absolute; top:0; left:-40%; width:40%; height:100%;
-  background: linear-gradient(90deg,transparent,rgba(184,145,47,0.18),transparent);
-  animation: discScan 4s ease-in-out infinite;
-}
-@keyframes discScan{ 0%{left:-40%;} 100%{left:100%;} }
-.disc-header-icon{
-  width:40px; height:40px; border-radius:50%; overflow:hidden;
-  border:1px solid rgba(184,145,47,0.45); flex-shrink:0; position:relative; z-index:1;
-}
-.disc-header-icon img{ width:100%; height:100%; object-fit:cover; }
-.disc-header-text{ position:relative; z-index:1; }
-.disc-header-text .name{ font-weight:700; font-size:15px; }
-.disc-header-text .status{
-  display:flex; align-items:center; gap:6px; font-size:12px;
-  color: rgba(255,255,255,0.6); margin-top:2px;
-}
-.disc-header-text .status .dot{
-  width:6px; height:6px; border-radius:50%; background:#6de08a;
-  box-shadow:0 0 6px #6de08a; animation: discPulse 1.8s ease-in-out infinite;
-}
-@keyframes discPulse{ 0%,100%{opacity:1;} 50%{opacity:0.4;} }
-
-.disc-messages{
-  flex:1; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:10px;
-  background:#FAF9F5;
-}
-.disc-row{ display:flex; gap:8px; align-items:flex-end; }
-.disc-row.user{ flex-direction:row-reverse; }
-.disc-avatar{
-  width:22px; height:22px; border-radius:50%; overflow:hidden; flex-shrink:0; background:#0B0B0C;
-}
-.disc-avatar img{ width:100%; height:100%; object-fit:cover; }
-.disc-bubble{
-  max-width:82%; padding:10px 13px; border-radius:10px; font-size:14px; line-height:1.5;
-  white-space:pre-wrap; word-break:break-word;
-}
-.disc-bubble.bot{
-  background:#fff; border:1px solid rgba(11,11,12,0.08); color:#0B0B0C;
-  border-bottom-left-radius:3px;
-}
-.disc-bubble.user{
-  background:#0B0B0C; color:#fff; border-bottom-right-radius:3px;
-}
-.disc-bubble a{ color:#B8912F; font-weight:600; text-decoration:underline; text-underline-offset:2px; }
-.disc-bubble.user a{ color: var(--gold-light); }
-
-.disc-chips{
-  display:flex; flex-wrap:wrap; gap:8px; padding:8px 16px 4px;
-  background:#FAF9F5; border-top:1px solid rgba(11,11,12,0.06);
-}
-.disc-chip{
-  background:#fff; border:1px solid rgba(184,145,47,0.4); color:#0B0B0C;
-  border-radius:20px; padding:8px 14px; font-size:13px; font-weight:600;
-  cursor:pointer; font-family:inherit; transition: background .2s ease, border-color .2s ease;
-}
-.disc-chip:hover{ background:rgba(184,145,47,0.08); border-color:#B8912F; }
-
-.disc-footer{ flex-shrink:0; border-top:1px solid rgba(11,11,12,0.08); background:#fff; }
-.disc-inputrow{ display:flex; padding:10px; gap:8px; }
-.disc-inputrow input{
-  flex:1; border:1px solid rgba(11,11,12,0.15); border-radius:8px;
-  padding:10px 12px; font-size:14px; font-family:inherit; outline:none;
-}
-.disc-inputrow input:focus{ border-color:#B8912F; }
-.disc-inputrow button{
-  background:#B8912F; border:none; border-radius:8px; padding:0 16px;
-  font-weight:700; font-size:13px; cursor:pointer; color:#0B0B0C; font-family:inherit;
-}
-.disc-inputrow input:disabled, .disc-inputrow button:disabled{ opacity:0.5; cursor:not-allowed; }
-
-.disc-mailto{
-  display:inline-flex; align-items:center; justify-content:center; gap:8px;
-  margin-top:10px; padding:12px 18px; background:#B8912F; color:#0B0B0C !important;
-  font-weight:700; font-size:14px; border-radius:8px; text-decoration:none;
-}
-.disc-bubble a.disc-mailto,
-.disc-bubble.bot a.disc-mailto{ color:#0B0B0C !important; text-decoration:none; }
-.disc-mailto:hover{ background:#D9B96A; color:#0B0B0C !important; }
-
-.visually-hidden{
-  position:absolute; width:1px; height:1px; padding:0; margin:-1px;
-  overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
-}
-
-@media (max-width:560px){
-  .discovery-chat{ max-height: none; min-height: 68vh; border-radius: 10px; }
-}
-
 </style>
 <script type="application/ld+json">
 {
@@ -1324,6 +1224,233 @@ img.hero-watermark{ max-width: min(520px, 70vw); opacity: 0.14; }
   "areaServed": "US"
 }
 </script>
+<style>
+/* Business Opportunity Analyzer — self-contained tool styles. Scoped to #boa. */
+#boa{
+  --boa-ink:#0B0B0C;
+  --boa-paper:#FAF9F5;
+  --boa-dim:#F1EFE8;
+  --boa-gold:#B8912F;
+  --boa-gold-deep:#795B12;
+  --boa-gold-light:#D9B96A;
+  --boa-champagne:#E8D9B5;
+  --boa-char:#3A3A3D;
+  --boa-line:rgba(184,145,47,0.35);
+  --boa-serif:'Fraunces', Georgia, serif;
+  --boa-sans:'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  box-sizing:border-box;
+  max-width:820px;
+  margin:0 auto 80px;
+  color:var(--boa-ink);
+  font-family:var(--boa-sans);
+}
+#boa *, #boa *::before, #boa *::after{ box-sizing:border-box; }
+#boa button, #boa a, #boa h1, #boa h2, #boa h3, #boa p, #boa label, #boa span{
+  font-family:inherit;
+}
+#boa .boa-shell{
+  background:#fff;
+  border:1px solid var(--boa-line);
+  border-radius:4px;
+  box-shadow:0 18px 50px rgba(11,11,12,0.06);
+  overflow:hidden;
+}
+#boa .boa-progress{
+  height:4px;
+  background:var(--boa-dim);
+}
+#boa .boa-progress > i{
+  display:block;
+  height:100%;
+  width:0;
+  background:linear-gradient(90deg, var(--boa-gold), var(--boa-gold-light));
+  transition:width .35s cubic-bezier(.16,.8,.24,1);
+}
+#boa .boa-pad{ padding:clamp(28px,5vw,48px); }
+#boa .boa-kicker{
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color:var(--boa-gold-deep);
+  margin:0 0 12px;
+}
+#boa h2.boa-title{
+  font-family:var(--boa-serif);
+  font-weight:500;
+  font-size:clamp(1.7rem,4vw,2.35rem);
+  line-height:1.12;
+  letter-spacing:-0.015em;
+  margin:0 0 14px;
+  color:var(--boa-ink);
+}
+#boa .boa-lead{
+  margin:0 0 28px;
+  color:var(--boa-char);
+  font-size:16.5px;
+  line-height:1.6;
+}
+#boa .boa-q{
+  font-family:var(--boa-serif);
+  font-size:clamp(1.35rem,3vw,1.75rem);
+  font-weight:500;
+  line-height:1.2;
+  margin:0 0 22px;
+  color:var(--boa-ink);
+}
+#boa .boa-options{ display:flex; flex-direction:column; gap:10px; }
+#boa .boa-opt{
+  display:block;
+  width:100%;
+  text-align:left;
+  background:var(--boa-paper);
+  border:1px solid rgba(11,11,12,0.1);
+  border-radius:3px;
+  padding:16px 18px;
+  font-size:15.5px;
+  font-weight:500;
+  color:var(--boa-ink);
+  cursor:pointer;
+  transition:border-color .2s ease, background .2s ease, transform .2s ease;
+}
+#boa .boa-opt:hover{
+  border-color:var(--boa-gold);
+  background:#fff;
+  transform:translateY(-1px);
+}
+#boa .boa-opt:focus-visible{
+  outline:2px solid var(--boa-gold);
+  outline-offset:2px;
+}
+#boa .boa-nav{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:16px;
+  margin-top:26px;
+}
+#boa .boa-back{
+  background:none;
+  border:0;
+  padding:0;
+  color:var(--boa-gold-deep);
+  font-size:14px;
+  font-weight:600;
+  cursor:pointer;
+}
+#boa .boa-back[hidden]{ display:none; }
+#boa .boa-step{
+  font-size:13px;
+  font-weight:600;
+  letter-spacing:0.04em;
+  color:var(--boa-char);
+}
+#boa .boa-start{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:15px 30px;
+  background:var(--boa-gold);
+  color:var(--boa-ink);
+  border:0;
+  border-radius:2px;
+  font-size:14px;
+  font-weight:600;
+  cursor:pointer;
+}
+#boa .boa-start:hover{ background:var(--boa-gold-light); }
+#boa .boa-score-row{
+  display:grid;
+  grid-template-columns:140px 1fr;
+  gap:28px;
+  align-items:center;
+  margin:8px 0 28px;
+}
+@media (max-width:640px){
+  #boa .boa-score-row{ grid-template-columns:1fr; gap:18px; }
+}
+#boa .boa-dial{
+  width:140px;
+  height:140px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:
+    radial-gradient(circle at center, #fff 0 58%, transparent 59%),
+    conic-gradient(var(--boa-gold) calc(var(--boa-pct) * 1%), var(--boa-dim) 0);
+}
+#boa .boa-dial strong{
+  font-family:var(--boa-serif);
+  font-size:42px;
+  font-weight:500;
+  line-height:1;
+}
+#boa .boa-dial span{
+  display:block;
+  font-size:11px;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  color:var(--boa-char);
+  margin-top:4px;
+  text-align:center;
+}
+#boa .boa-offers{ display:flex; flex-direction:column; gap:12px; margin:22px 0 28px; }
+#boa .boa-offer{
+  border:1px solid var(--boa-line);
+  background:var(--boa-paper);
+  padding:18px 20px;
+}
+#boa .boa-offer h3{
+  font-family:var(--boa-serif);
+  font-size:1.2rem;
+  font-weight:500;
+  margin:0 0 6px;
+}
+#boa .boa-price{
+  font-size:14px;
+  font-weight:700;
+  color:var(--boa-gold-deep);
+  margin:0 0 8px;
+}
+#boa .boa-offer p{ margin:0; color:var(--boa-char); font-size:14.5px; line-height:1.55; }
+#boa .boa-actions{ display:flex; flex-wrap:wrap; gap:12px; }
+#boa .boa-cta{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:15px 30px;
+  background:var(--boa-gold);
+  color:var(--boa-ink);
+  border-radius:2px;
+  font-size:14px;
+  font-weight:600;
+  text-decoration:none;
+}
+#boa .boa-cta:hover{ background:var(--boa-gold-light); }
+#boa .boa-ghost{
+  display:inline-flex;
+  align-items:center;
+  padding:15px 24px;
+  border:1px solid rgba(11,11,12,0.25);
+  border-radius:2px;
+  font-size:14px;
+  font-weight:600;
+  color:var(--boa-ink);
+  text-decoration:none;
+}
+#boa .boa-note{
+  margin:22px 0 0;
+  font-size:13px;
+  color:var(--boa-char);
+  line-height:1.5;
+}
+#boa[data-screen="intro"] .boa-quiz,
+#boa[data-screen="intro"] .boa-results,
+#boa[data-screen="quiz"] .boa-intro,
+#boa[data-screen="quiz"] .boa-results,
+#boa[data-screen="results"] .boa-intro,
+#boa[data-screen="results"] .boa-quiz{ display:none; }
+</style>
 </head>
 <body>
 
@@ -1333,7 +1460,7 @@ img.hero-watermark{ max-width: min(520px, 70vw); opacity: 0.14; }
     <ul class="nav-links">
       <li><a href="index.html">Home</a></li>
       <li><a href="services.html">Services</a></li>
-      <li><a href="analyzer.html">Free Analyzer</a></li>
+      <li><a href="analyzer.html" class="active">Free Analyzer</a></li>
       <li><a href="portfolio.html">Portfolio</a></li>
       <li><a href="blog.html">Blog</a></li>
       <li><a href="about.html">About</a></li>
@@ -1353,45 +1480,348 @@ img.hero-watermark{ max-width: min(520px, 70vw); opacity: 0.14; }
   <div class="page-header-glow" aria-hidden="true"></div>
   <img class="site-logo page-header-logo" src="assets/logo.png" alt="Launch &amp; Level Up Studio logo">
   <div class="wrap">
-    <span class="eyebrow on-dark">Client Discovery</span>
-    <h1>Tell us about your project.</h1>
-    <p>A short, guided intake so we can prepare for your build. Access code required.</p>
+    <span class="eyebrow on-dark">Free Analyzer</span>
+    <h1>See where your business is losing leads.</h1>
+    <p>A short, self-serve score of missed calls, a weak website, slow follow-up, and the other quiet leaks — plus a starting estimate.</p>
   </div>
 </header>
 
-<section class="discovery-section">
+<section id="boa-wrap">
   <div class="wrap">
-    <div id="discovery-gate" class="discovery-gate" role="region" aria-label="Access code gate">
-      <h2>Enter your access code</h2>
-      <p>Use the code we shared with you to unlock the discovery questionnaire.</p>
-      <form id="gate-form" class="gate-form" autocomplete="off">
-        <label for="access-code">Access code</label>
-        <input type="password" id="access-code" name="access-code" inputmode="numeric" pattern="[0-9]*" maxlength="8" required aria-describedby="gate-error" autocomplete="off">
-        <p id="gate-error" class="gate-error" role="alert" hidden>Incorrect code. Please try again.</p>
-        <button type="submit" class="btn btn-gold">Unlock</button>
-      </form>
-    </div>
-
-    <div id="discovery-chat" class="discovery-chat" hidden aria-label="Discovery questionnaire chat">
-      <div class="disc-header">
-        <div class="disc-header-icon"><img src="assets/chatbot-avatar.jpg" alt=""></div>
-        <div class="disc-header-text">
-          <div class="name">AI Bot</div>
-          <div class="status"><span class="dot" aria-hidden="true"></span> Online</div>
-        </div>
-      </div>
-      <div id="disc-messages" class="disc-messages" role="log" aria-live="polite" aria-relevant="additions"></div>
-      <div id="disc-chips" class="disc-chips" hidden></div>
-      <div class="disc-footer">
-        <div class="disc-inputrow">
-          <label for="disc-input" class="visually-hidden">Your answer</label>
-          <input type="text" id="disc-input" placeholder="Type your answer…" aria-label="Your answer" autocomplete="off">
-          <button type="button" id="disc-send">Send</button>
+    <div id="boa" data-screen="intro">
+      <div class="boa-shell">
+        <div class="boa-progress" aria-hidden="true"><i id="boa-bar"></i></div>
+        <div class="boa-pad">
+          <div class="boa-intro">
+            <p class="boa-kicker">Free business opportunity analyzer</p>
+            <h2 class="boa-title">Find the leaks. Then see what it takes to plug them.</h2>
+            <p class="boa-lead">Nine short questions about your website, phones, booking, follow-up, reviews, and admin time. You get a leak score, a starting estimate, and the closest studio offers — no account required.</p>
+            <button type="button" class="boa-start" id="boa-start">Start the analyzer</button>
+          </div>
+          <div class="boa-quiz">
+            <p class="boa-kicker" id="boa-kicker">Question</p>
+            <h2 class="boa-q" id="boa-question"></h2>
+            <div class="boa-options" id="boa-options"></div>
+            <div class="boa-nav">
+              <button type="button" class="boa-back" id="boa-back" hidden>Back</button>
+              <span class="boa-step" id="boa-step"></span>
+            </div>
+          </div>
+          <div class="boa-results">
+            <p class="boa-kicker">Your results</p>
+            <h2 class="boa-title">Here is where leads are slipping.</h2>
+            <div class="boa-score-row">
+              <div class="boa-dial" id="boa-dial" style="--boa-pct:0">
+                <div>
+                  <strong id="boa-score">0</strong>
+                  <span>Leak score</span>
+                </div>
+              </div>
+              <div>
+                <p class="boa-lead" id="boa-summary" style="margin-bottom:12px;"></p>
+                <p class="boa-price" id="boa-estimate"></p>
+              </div>
+            </div>
+            <p class="boa-kicker">Closest starting offers</p>
+            <div class="boa-offers" id="boa-offers"></div>
+            <div class="boa-actions">
+              <a class="boa-cta" id="boa-book" href="contact.html">Book a Discovery Call</a>
+              <a class="boa-ghost" id="boa-email" href="mailto:launchandlevelupstudio@gmail.com">Email the studio</a>
+              <button type="button" class="boa-back" id="boa-restart">Start over</button>
+            </div>
+            <p class="boa-note">Estimates are directional, based on your answers and published package prices. Final scope is confirmed on a free discovery call.</p>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </section>
+
+<script>
+const BOA_CONFIG = {
+  bookingUrl: "https://launchandlevelupstudio.com/contact.html",
+  email: "launchandlevelupstudio@gmail.com",
+  assume: {
+    avgTicket: 350,
+    closeRate: 0.28,
+    workdays: 22
+  },
+  weights: {
+    textback: 1.0,
+    frontdesk: 1.15,
+    booking: 0.9,
+    followup: 1.05,
+    redesign: 1.0,
+    newsite: 1.2,
+    reviews: 0.85,
+    content: 0.8,
+    admin: 0.7
+  },
+  offers: {
+    textback: {
+      name: "Missed-call text-back",
+      price: "$750 setup + $75/mo",
+      blurb: "When a call is missed, a text goes out so the lead does not bounce to the next business."
+    },
+    frontdesk: {
+      name: "AI Front Desk",
+      price: "$2,800 setup + $250/mo",
+      blurb: "A fuller front-desk layer: questions, booking, and after-hours coverage so the phone is never a dead end."
+    },
+    booking: {
+      name: "Booking setup",
+      price: "$450",
+      blurb: "A clean way for people to pick a time without the back-and-forth."
+    },
+    followup: {
+      name: "Automation Starter",
+      price: "$1,600 setup + $150/mo",
+      blurb: "Reminders and follow-up that run even when the day gets busy."
+    },
+    redesign: {
+      name: "Redesign Sprint",
+      price: "$2,900",
+      blurb: "A focused rebuild of an existing site so it looks current and actually captures the lead."
+    },
+    newsite: {
+      name: "Starter Site",
+      price: "$2,200",
+      blurb: "A custom, mobile-ready site with a real inquiry path — the foundation most businesses are missing."
+    },
+    reviews: {
+      name: "Review Engine",
+      price: "$450",
+      blurb: "A simple system to ask for reviews and keep public replies from falling behind."
+    },
+    content: {
+      name: "Blog Boost",
+      price: "$550/mo",
+      blurb: "Two SEO-minded posts a month so you show up for the searches you are already losing."
+    },
+    admin: {
+      name: "Opportunity Assessment",
+      price: "$450, credited to the project",
+      blurb: "A paid working session that maps the leaks and credits the fee if you move forward."
+    }
+  }
+};
+
+(function () {
+  const questions = [
+    {
+      id: "website",
+      q: "Do you have a website that actually works for you?",
+      options: [
+        { label: "No real website yet", leak: 14, offers: { newsite: 10 } },
+        { label: "Yes, but it is old or hard to use", leak: 12, offers: { redesign: 10 } },
+        { label: "It looks okay, but it does not bring in leads", leak: 9, offers: { redesign: 6, newsite: 3 } },
+        { label: "It is current and converting", leak: 1, offers: {} }
+      ]
+    },
+    {
+      id: "calls",
+      q: "What happens when a customer call comes in and you are busy?",
+      options: [
+        { label: "It often goes to voicemail", leak: 13, offers: { textback: 10, frontdesk: 7 } },
+        { label: "We call back when we can", leak: 9, offers: { textback: 7, followup: 5 } },
+        { label: "Someone usually answers", leak: 4, offers: { textback: 3 } },
+        { label: "We rarely miss calls", leak: 1, offers: {} }
+      ]
+    },
+    {
+      id: "desk",
+      q: "Who owns the phone and first-reply during the day?",
+      options: [
+        { label: "No one is dedicated to it", leak: 12, offers: { frontdesk: 10 } },
+        { label: "Staff juggle phones with other work", leak: 8, offers: { frontdesk: 7 } },
+        { label: "We have a receptionist or answering service", leak: 3, offers: { frontdesk: 2 } },
+        { label: "We already use an after-hours or AI system", leak: 1, offers: {} }
+      ]
+    },
+    {
+      id: "booking",
+      q: "How do people book you today?",
+      options: [
+        { label: "They have to call or email", leak: 11, offers: { booking: 10 } },
+        { label: "A form, then we schedule by hand", leak: 8, offers: { booking: 7 } },
+        { label: "We have a calendar, but it is clunky", leak: 5, offers: { booking: 5 } },
+        { label: "Online booking already works well", leak: 1, offers: {} }
+      ]
+    },
+    {
+      id: "followup",
+      q: "After a lead comes in, how fast do you follow up?",
+      options: [
+        { label: "Leads often sit until we remember", leak: 12, offers: { followup: 10 } },
+        { label: "We follow up, but it is inconsistent", leak: 8, offers: { followup: 7 } },
+        { label: "Same day, by hand", leak: 4, offers: { followup: 4 } },
+        { label: "Follow-up is already automated", leak: 1, offers: {} }
+      ]
+    },
+    {
+      id: "reviews",
+      q: "How do reviews show up for your business?",
+      options: [
+        { label: "We do not ask for them", leak: 9, offers: { reviews: 10 } },
+        { label: "We ask sometimes, and it is messy", leak: 7, offers: { reviews: 7 } },
+        { label: "We get them, but replies lag", leak: 5, offers: { reviews: 5 } },
+        { label: "Requests and replies are handled", leak: 1, offers: {} }
+      ]
+    },
+    {
+      id: "content",
+      q: "Do you publish anything people can find later?",
+      options: [
+        { label: "Nothing regular", leak: 8, offers: { content: 10 } },
+        { label: "A post here and there", leak: 6, offers: { content: 7 } },
+        { label: "We post, but not with a real SEO plan", leak: 4, offers: { content: 5 } },
+        { label: "We publish on a schedule", leak: 1, offers: {} }
+      ]
+    },
+    {
+      id: "admin",
+      q: "How many hours a week go to quotes, reminders, and scheduling?",
+      options: [
+        { label: "10+ hours", leak: 10, offers: { admin: 8, followup: 3, frontdesk: 3 } },
+        { label: "About 5–10 hours", leak: 7, offers: { admin: 6 } },
+        { label: "A few hours", leak: 4, offers: { admin: 3 } },
+        { label: "It is already pretty tight", leak: 1, offers: {} }
+      ]
+    },
+    {
+      id: "volume",
+      q: "Roughly how many new inquiries do you get in a month?",
+      options: [
+        { label: "A handful (under 10)", leak: 2, leads: 6, offers: {} },
+        { label: "10–30", leak: 3, leads: 18, offers: {} },
+        { label: "30–80", leak: 4, leads: 45, offers: {} },
+        { label: "80 or more", leak: 5, leads: 90, offers: {} }
+      ]
+    }
+  ];
+
+  const root = document.getElementById("boa");
+  if (!root) return;
+  const bar = document.getElementById("boa-bar");
+  const qEl = document.getElementById("boa-question");
+  const kicker = document.getElementById("boa-kicker");
+  const optionsEl = document.getElementById("boa-options");
+  const stepEl = document.getElementById("boa-step");
+  const backBtn = document.getElementById("boa-back");
+  const answers = [];
+  let idx = 0;
+
+  function setScreen(name) {
+    root.setAttribute("data-screen", name);
+  }
+
+  function renderQuestion() {
+    const item = questions[idx];
+    kicker.textContent = "Question " + (idx + 1) + " of " + questions.length;
+    qEl.textContent = item.q;
+    stepEl.textContent = (idx + 1) + " / " + questions.length;
+    backBtn.hidden = idx === 0;
+    bar.style.width = Math.round((idx / questions.length) * 100) + "%";
+    optionsEl.innerHTML = "";
+    item.options.forEach(function (opt, i) {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "boa-opt";
+      btn.textContent = opt.label;
+      btn.addEventListener("click", function () { choose(i); });
+      optionsEl.appendChild(btn);
+    });
+  }
+
+  function choose(optionIndex) {
+    answers[idx] = optionIndex;
+    if (idx < questions.length - 1) {
+      idx += 1;
+      renderQuestion();
+    } else {
+      showResults();
+    }
+  }
+
+  function scoreAnswers() {
+    const offerScores = {};
+    Object.keys(BOA_CONFIG.offers).forEach(function (key) { offerScores[key] = 0; });
+    let leak = 0;
+    let leads = 18;
+    answers.forEach(function (optIndex, qIndex) {
+      const opt = questions[qIndex].options[optIndex];
+      leak += opt.leak || 0;
+      if (opt.leads) leads = opt.leads;
+      Object.keys(opt.offers || {}).forEach(function (key) {
+        const weight = (BOA_CONFIG.weights && BOA_CONFIG.weights[key]) || 1;
+        offerScores[key] += opt.offers[key] * weight;
+      });
+    });
+    const maxLeak = questions.reduce(function (sum, q) {
+      return sum + Math.max.apply(null, q.options.map(function (o) { return o.leak || 0; }));
+    }, 0);
+    const leakScore = Math.max(8, Math.min(98, Math.round((leak / maxLeak) * 100)));
+    const ranked = Object.keys(offerScores)
+      .map(function (key) { return { key: key, score: offerScores[key] }; })
+      .sort(function (a, b) { return b.score - a.score; })
+      .filter(function (row) { return row.score >= 4; });
+    const picked = (ranked.length ? ranked : [{ key: "admin", score: 1 }]).slice(0, 3);
+    const assume = BOA_CONFIG.assume || {};
+    const monthly = Math.round(leads * (assume.avgTicket || 350) * (assume.closeRate || 0.28) * (leakScore / 100));
+    return { leakScore: leakScore, picked: picked, monthly: monthly };
+  }
+
+  function money(n) {
+    return "$" + n.toLocaleString("en-US");
+  }
+
+  function showResults() {
+    const result = scoreAnswers();
+    setScreen("results");
+    bar.style.width = "100%";
+    document.getElementById("boa-score").textContent = String(result.leakScore);
+    document.getElementById("boa-dial").style.setProperty("--boa-pct", String(result.leakScore));
+    document.getElementById("boa-summary").textContent = result.leakScore >= 70
+      ? "A lot of demand is dying in the gap between first contact and a booked job."
+      : result.leakScore >= 40
+        ? "You are catching some of it, but a few broken handoffs are still costing you work."
+        : "The basics are in place. A tighter system would still recover a few quiet leaks.";
+    document.getElementById("boa-estimate").textContent = "Directional monthly leak: about " + money(result.monthly) + " in work that never gets booked.";
+    const box = document.getElementById("boa-offers");
+    box.innerHTML = "";
+    result.picked.forEach(function (row) {
+      const offer = BOA_CONFIG.offers[row.key];
+      const el = document.createElement("article");
+      el.className = "boa-offer";
+      el.innerHTML = "<h3></h3><p class=\"boa-price\"></p><p></p>";
+      el.querySelector("h3").textContent = offer.name;
+      el.querySelector(".boa-price").textContent = offer.price;
+      el.querySelector("p:last-child").textContent = offer.blurb;
+      box.appendChild(el);
+    });
+    document.getElementById("boa-book").href = BOA_CONFIG.bookingUrl;
+    document.getElementById("boa-email").href = "mailto:" + BOA_CONFIG.email;
+  }
+
+  document.getElementById("boa-start").addEventListener("click", function () {
+    idx = 0;
+    answers.length = 0;
+    setScreen("quiz");
+    renderQuestion();
+  });
+  backBtn.addEventListener("click", function () {
+    if (idx === 0) return;
+    idx -= 1;
+    renderQuestion();
+  });
+  document.getElementById("boa-restart").addEventListener("click", function () {
+    idx = 0;
+    answers.length = 0;
+    setScreen("intro");
+    bar.style.width = "0";
+  });
+})();
+</script>
 
 <footer>
   <div class="wrap">
@@ -1732,800 +2162,633 @@ if ('IntersectionObserver' in window && staggerEls.length) {
 } else {
   staggerEls.forEach(el => el.classList.add('in'));
 }
-</script>
 
-<script>
-(function () {
-  const ACCESS_CODE = '2321';
-  const UNLOCK_KEY = 'llu_discovery_unlocked';
-  const SAVES_KEY = 'llu_discovery_saves_v2';
-  const DRAFT_KEY = '_draft';
-  const SAVE_TTL_MS = 14 * 24 * 60 * 60 * 1000;
-  const W3_KEY = '14ebd4ce-45fe-46b8-adc1-683fb9c46cdc';
-  const STUDIO_EMAIL = 'launchandlevelupstudio@gmail.com';
-  const MAX_FOLLOWUPS = 7;
-
-  const gate = document.getElementById('discovery-gate');
-  const chat = document.getElementById('discovery-chat');
-  const gateForm = document.getElementById('gate-form');
-  const codeInput = document.getElementById('access-code');
-  const gateError = document.getElementById('gate-error');
-  const messagesEl = document.getElementById('disc-messages');
-  const chipsEl = document.getElementById('disc-chips');
-  const inputEl = document.getElementById('disc-input');
-  const sendBtn = document.getElementById('disc-send');
-
-  const answers = {};
-  let stepIndex = 0;
-  // menu | resume_ask | intake | assets | followup | done
-  let phase = 'intake';
-  let followupCount = 0;
-  let busy = false;
-  let submitted = false;
-  let activeSaveKey = DRAFT_KEY;
-  let skipPersist = false;
-  let lastSectionIntro = null;
-
-  // Full client brief. Opening: firstName → businessName → email, then Sections 1–7.
-  // sectionIntro: shown once before the question when entering that section.
-  // optional: adds a Skip chip.
-  // skipIf: function(answers) → skip this step.
-  // sectionGate: chips Answer these / Skip section; stores skip flag on key.
-  // chipsExtra: chips shown alongside text/email input (e.g. Same as reply email).
-  const steps = [
-    { key: 'firstName', q: "Hi — I'm the Launch & Level Up Studio intake bot. What's your first name?", type: 'text' },
-    { key: 'businessName', q: function (a) { return 'Nice to meet you, ' + a.firstName + '. What\'s the business name?'; }, type: 'text' },
-    { key: 'email', q: "What's the best email to reach you at? (We'll use this for replies.)", type: 'email' },
-
-    // Section 1 — Business Fundamentals
-    { key: 'whatBusinessDoes', q: 'What does your business do, in one sentence?', type: 'text', sectionIntro: 'Section 1 of 7 — Business Fundamentals' },
-    { key: 'yearsInBusiness', q: 'How long have you been in business?', type: 'text' },
-    { key: 'existingWebsite', q: 'Do you have an existing website? (Paste the URL, or type "no".)', type: 'text' },
-    { key: 'existingLogo', q: 'Do you have an existing logo?', type: 'chips', chips: ['Yes, I\'ll email it', 'No'] },
-    { key: 'serviceArea', q: 'Business address / service area?', type: 'text' },
-    { key: 'publicPhone', q: 'Public phone number for the site?', type: 'text' },
-    { key: 'publicEmail', q: 'Public email to show on the site?', type: 'email', chipsExtra: ['Same as my reply email'] },
-
-    // Section 2 — Audience & Positioning
-    { key: 'idealCustomer', q: 'Who is your ideal customer?', type: 'text', sectionIntro: 'Section 2 of 7 — Audience & Positioning' },
-    { key: 'mainProblem', q: 'What main problem do you solve for them?', type: 'text' },
-    { key: 'differentiator', q: 'What makes you different from alternatives?', type: 'text' },
-    { key: 'primaryAction', q: 'What should visitors do first on the site?', type: 'chips', chips: ['Call', 'Book an appointment', 'Buy something', 'Send a message', 'Fill out a form'] },
-    { key: 'notFor', q: 'Who is this NOT for? (optional)', type: 'text', optional: true },
-
-    // Section 3 — Brand & Visual Direction
-    { key: 'feelWords', q: 'What 3–5 words should the brand feel like?', type: 'text', sectionIntro: 'Section 3 of 7 — Brand & Visual Direction' },
-    { key: 'likedSites', q: 'Any sites you like (and why)?', type: 'text' },
-    { key: 'dislikedSites', q: 'Any sites or styles you dislike? (optional)', type: 'text', optional: true },
-    { key: 'preferredColors', q: 'Preferred colors?', type: 'text' },
-    { key: 'avoidColors', q: 'Colors to avoid? (optional)', type: 'text', optional: true },
-    { key: 'brandFonts', q: 'Do you have brand fonts?', type: 'chips', chips: ['Yes, I\'ll specify', 'No, open to recommendations'] },
-    { key: 'hasPhotos', q: 'Do you have photos we can use?', type: 'chips', chips: ['Yes, I\'ll email them', 'No'] },
-    { key: 'stockOrAi', q: 'Are you open to stock or AI imagery if needed?', type: 'chips', chips: ['Yes', 'No, I\'ll source my own', 'Not sure'] },
-
-    // Section 4 — Content & Structure
-    { key: 'neededPages', q: 'Which pages do you need? (e.g. Home, About, Services, Pricing, Portfolio/Work, Blog, Contact)', type: 'text', sectionIntro: 'Section 4 of 7 — Content & Structure' },
-    { key: 'servicesProducts', q: 'List each service/product: name, description, price, and what\'s included.', type: 'text' },
-    { key: 'aboutStoryStatus', q: 'Do you already have an About story written?', type: 'chips', chips: ['Yes, I\'ll paste it below', 'No, help me draft it'] },
-    { key: 'aboutStory', q: 'Paste your About story below.', type: 'text', optional: true, skipIf: function (a) { return !/^yes/i.test(String(a.aboutStoryStatus || '')); } },
-    { key: 'credentials', q: 'Credentials, certifications, or awards? (optional)', type: 'text', optional: true },
-    { key: 'testimonials', q: 'Paste testimonials, or type "none yet".', type: 'text' },
-    { key: 'socialHandles', q: 'Social handles / profile links?', type: 'text' },
-    { key: 'legalCompliance', q: 'Any legal or compliance needs (HIPAA, disclaimers, etc.)? (optional)', type: 'text', optional: true },
-
-    // Section 5 — Lead Capture & Booking (optional section)
-    { key: '_section5', q: 'Next is Lead Capture & Booking. Answer these, or skip the section?', type: 'chips', chips: ['Answer these', 'Skip section'], sectionIntro: 'Section 5 of 7 — Lead Capture & Booking', sectionGate: true },
-    { key: 'currentCustomers', q: 'How do customers find you today?', type: 'text', skipIf: function (a) { return a._section5 === 'Skip section'; } },
-    { key: 'wantBooking', q: 'Do you want online booking?', type: 'chips', chips: ['Yes', 'No', 'Not sure'], skipIf: function (a) { return a._section5 === 'Skip section'; } },
-    { key: 'bookingTool', q: 'What booking tool do you use (or want)?', type: 'text', optional: true, skipIf: function (a) { return a._section5 === 'Skip section' || !/^yes$/i.test(String(a.wantBooking || '')); } },
-    { key: 'formNotify', q: 'How should we notify you of form submissions?', type: 'chips', chips: ['Email', 'Text', 'Both'], skipIf: function (a) { return a._section5 === 'Skip section'; } },
-    { key: 'wantNewsletter', q: 'Do you want a newsletter signup?', type: 'chips', chips: ['Yes', 'No'], skipIf: function (a) { return a._section5 === 'Skip section'; } },
-
-    // Section 6 — Technical & Domain (optional section)
-    { key: '_section6', q: 'Next is Technical & Domain. Answer these, or skip the section?', type: 'chips', chips: ['Answer these', 'Skip section'], sectionIntro: 'Section 6 of 7 — Technical & Domain', sectionGate: true },
-    { key: 'ownDomain', q: 'Do you already own a domain?', type: 'chips', chips: ['Yes', 'No, need help buying one'], skipIf: function (a) { return a._section6 === 'Skip section'; } },
-    { key: 'domainDetails', q: 'What\'s the domain, and where is it registered?', type: 'text', skipIf: function (a) { return a._section6 === 'Skip section' || !/^yes$/i.test(String(a.ownDomain || '')); } },
-    { key: 'domainEmail', q: 'Do you need email on that domain?', type: 'chips', chips: ['Yes', 'No, need that set up'], skipIf: function (a) { return a._section6 === 'Skip section'; } },
-    { key: 'otherTools', q: 'Any other tools we should connect (CRM, analytics, etc.)? (optional)', type: 'text', optional: true, skipIf: function (a) { return a._section6 === 'Skip section'; } },
-
-    // Section 7 — Logistics (optional section)
-    { key: '_section7', q: 'Last section: Logistics. Answer these, or skip the section?', type: 'chips', chips: ['Answer these', 'Skip section'], sectionIntro: 'Section 7 of 7 — Logistics', sectionGate: true },
-    { key: 'launchDate', q: 'Target launch date?', type: 'text', skipIf: function (a) { return a._section7 === 'Skip section'; } },
-    { key: 'finalApprover', q: 'Who gives final approval?', type: 'text', skipIf: function (a) { return a._section7 === 'Skip section'; } },
-    { key: 'bestContact', q: 'Best way / times to reach you?', type: 'text', skipIf: function (a) { return a._section7 === 'Skip section'; } },
-    { key: 'anythingElse', q: 'Anything else we should know? (optional)', type: 'text', optional: true, skipIf: function (a) { return a._section7 === 'Skip section'; } }
-  ];
-
-  const labels = {
-    firstName: 'First name',
-    businessName: 'Business name',
-    email: 'Reply email',
-    whatBusinessDoes: 'What the business does',
-    yearsInBusiness: 'Years in business',
-    existingWebsite: 'Existing website',
-    existingLogo: 'Existing logo',
-    serviceArea: 'Business address / service area',
-    publicPhone: 'Public phone',
-    publicEmail: 'Public email',
-    idealCustomer: 'Ideal customer',
-    mainProblem: 'Main problem solved',
-    differentiator: 'Differentiator',
-    primaryAction: 'Primary action',
-    notFor: 'Not for',
-    feelWords: 'Brand feel words',
-    likedSites: 'Liked sites',
-    dislikedSites: 'Disliked sites / styles',
-    preferredColors: 'Preferred colors',
-    avoidColors: 'Colors to avoid',
-    brandFonts: 'Brand fonts',
-    hasPhotos: 'Has photos',
-    stockOrAi: 'Open to stock / AI imagery',
-    neededPages: 'Needed pages',
-    servicesProducts: 'Services / products',
-    aboutStoryStatus: 'About story status',
-    aboutStory: 'About story',
-    credentials: 'Credentials / awards',
-    testimonials: 'Testimonials',
-    socialHandles: 'Social handles',
-    legalCompliance: 'Legal / compliance',
-    _section5: 'Section 5 — Lead Capture & Booking',
-    currentCustomers: 'How customers find you',
-    wantBooking: 'Wants online booking',
-    bookingTool: 'Booking tool',
-    formNotify: 'Form notification preference',
-    wantNewsletter: 'Wants newsletter signup',
-    _section6: 'Section 6 — Technical & Domain',
-    ownDomain: 'Owns domain',
-    domainDetails: 'Domain details',
-    domainEmail: 'Domain email',
-    otherTools: 'Other tools to connect',
-    _section7: 'Section 7 — Logistics',
-    launchDate: 'Target launch date',
-    finalApprover: 'Final approver',
-    bestContact: 'Best contact method / times',
-    anythingElse: 'Anything else'
-  };
-
-  function normalizeBiz(name) {
-    return String(name || '').trim().toLowerCase().replace(/\s+/g, ' ');
+// Contact form (front-end only demo)
+const contactForm = document.getElementById('contact-form');
+if (contactForm) {
+  // Honeypot for Web3Forms bot filtering (must stay empty)
+  if (!contactForm.querySelector('input[name="botcheck"]')) {
+    const hp = document.createElement('input');
+    hp.type = 'checkbox';
+    hp.name = 'botcheck';
+    hp.value = 'true';
+    hp.tabIndex = -1;
+    hp.autocomplete = 'off';
+    hp.setAttribute('aria-hidden', 'true');
+    hp.style.cssText = 'display:none !important; position:absolute; left:-9999px;';
+    contactForm.prepend(hp);
   }
-
-  function loadSaves() {
-    try {
-      const raw = localStorage.getItem(SAVES_KEY);
-      const map = raw ? JSON.parse(raw) : {};
-      if (!map || typeof map !== 'object') return {};
-      const now = Date.now();
-      let changed = false;
-      Object.keys(map).forEach(function (k) {
-        const s = map[k];
-        if (!s || !s.updatedAt || (now - s.updatedAt) > SAVE_TTL_MS) {
-          delete map[k];
-          changed = true;
-        }
-      });
-      if (changed) writeSaves(map);
-      return map;
-    } catch (e) {
-      return {};
+  contactForm.setAttribute('data-form-version', 'w3f-2');
+  contactForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const success = document.getElementById('form-success');
+    const submitBtn = contactForm.querySelector('button[type="submit"]');
+    const name = (contactForm.querySelector('#name') || {}).value || '';
+    const email = (contactForm.querySelector('#email') || {}).value || '';
+    const business = (contactForm.querySelector('#business') || {}).value || '';
+    const message = (contactForm.querySelector('#message') || {}).value || '';
+    const interests = Array.from(contactForm.querySelectorAll('input[name="interest"]:checked')).map(el => el.value);
+    if (!name.trim() || !email.trim()) {
+      alert('Please add your name and email.');
+      return;
     }
-  }
-
-  function writeSaves(map) {
-    try { localStorage.setItem(SAVES_KEY, JSON.stringify(map)); } catch (e) {}
-  }
-
-  function listResumableKeys() {
-    const map = loadSaves();
-    return Object.keys(map).filter(function (k) {
-      return k !== DRAFT_KEY && map[k] && map[k].phase !== 'done';
-    });
-  }
-
-  function captureMessages() {
-    const out = [];
-    messagesEl.querySelectorAll('.disc-row').forEach(function (row) {
-      const bubble = row.querySelector('.disc-bubble');
-      if (!bubble) return;
-      const role = row.classList.contains('user') ? 'user' : 'bot';
-      const isHtml = !!bubble.querySelector('a, br, strong');
-      out.push({
-        role: role,
-        text: isHtml ? bubble.innerHTML : bubble.textContent,
-        html: isHtml
-      });
-    });
-    return out;
-  }
-
-  function persist() {
-    if (skipPersist) return;
-    if (phase === 'menu' || phase === 'resume_ask' || phase === 'done') return;
-    const map = loadSaves();
-    const payload = {
-      answers: Object.assign({}, answers),
-      stepIndex: stepIndex,
-      phase: phase,
-      followupCount: followupCount,
-      submitted: submitted,
-      messages: captureMessages(),
-      updatedAt: Date.now()
-    };
-    let key = activeSaveKey;
-    if (answers.businessName) {
-      const bizKey = normalizeBiz(answers.businessName);
-      if (bizKey) {
-        if (key === DRAFT_KEY && map[DRAFT_KEY]) delete map[DRAFT_KEY];
-        key = bizKey;
-        activeSaveKey = bizKey;
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.dataset.label = submitBtn.textContent;
+      submitBtn.textContent = 'Sending...';
+    }
+    const fd = new FormData();
+    fd.append('access_key', '14ebd4ce-45fe-46b8-adc1-683fb9c46cdc');
+    fd.append('subject', 'New website inquiry - Launch & Level Up Studio');
+    fd.append('from_name', name.trim() || 'Website inquiry');
+    fd.append('name', name.trim());
+    fd.append('email', email.trim());
+    fd.append('business', business.trim());
+    fd.append('interest', interests.join(', ') || 'Not specified');
+    fd.append('message', message.trim() || '(No message provided)');
+    fd.append('replyto', email.trim());
+    fd.append('botcheck', ''); // must be empty
+    let delivered = false;
+    let errMsg = '';
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', { method: 'POST', body: fd });
+      const data = await res.json().catch(() => ({}));
+      delivered = !!(res.ok && data && data.success);
+      if (!delivered) errMsg = (data && (data.message || data.error)) || ('HTTP ' + res.status);
+    } catch (err) {
+      console.warn('Inquiry submission failed', err);
+      errMsg = (err && err.message) || 'network error';
+    }
+    if (delivered) {
+      contactForm.reset();
+      if (success) {
+        success.textContent = 'Thanks — your inquiry was sent. We will reply to your email within 1 business day.';
+        success.classList.add('show');
+      }
+      contactForm.style.opacity = '0.5';
+      contactForm.style.pointerEvents = 'none';
+    } else {
+      alert('We could not send your inquiry (' + (errMsg || 'unknown') + '). Please email launchandlevelupstudio@gmail.com directly.');
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = submitBtn.dataset.label || 'Send Inquiry';
       }
     }
-    map[key] = payload;
-    writeSaves(map);
-  }
-
-  function clearSave(key) {
-    if (!key) return;
-    const map = loadSaves();
-    if (map[key]) {
-      delete map[key];
-      writeSaves(map);
-    }
-  }
-
-  function clearAnswers() {
-    Object.keys(answers).forEach(function (k) { delete answers[k]; });
-    stepIndex = 0;
-    phase = 'intake';
-    followupCount = 0;
-    submitted = false;
-    activeSaveKey = DRAFT_KEY;
-    lastSectionIntro = null;
-  }
-
-  function unlock() {
-    try { sessionStorage.setItem(UNLOCK_KEY, '1'); } catch (e) {}
-    gate.hidden = true;
-    chat.hidden = false;
-    enterChat();
-  }
-
-  function isUnlocked() {
-    try { return sessionStorage.getItem(UNLOCK_KEY) === '1'; } catch (e) { return false; }
-  }
-
-  gateForm.addEventListener('submit', function (e) {
-    e.preventDefault();
-    const val = (codeInput.value || '').trim();
-    if (val === ACCESS_CODE) {
-      gateError.hidden = true;
-      unlock();
-    } else {
-      gateError.hidden = false;
-      codeInput.value = '';
-      codeInput.focus();
-    }
   });
+}
 
-  function scrollMessages() {
+</script>
+<!-- Launch Assistant (AI chatbot) — self-contained, no external dependency.
+     IMPORTANT: update endpoint/leadEndpoint below once you deploy the backend
+     from the llu-chatbot package (see its README.md). Until then, the widget
+     shows and works visually, but replies will show a connection-error
+     fallback message since there's no live backend yet. -->
+<script>
+  window.LLUChatbotConfig = {
+    endpoint: "https://llu-chat-api-launch-and-level-up-studio.vercel.app/api/chat",
+    leadEndpoint: "https://api.web3forms.com/submit",
+    web3formsAccessKey: "14ebd4ce-45fe-46b8-adc1-683fb9c46cdc",
+    clientId: "launch-level-up",
+    businessName: "Launch & Level Up Studio",
+    assistantName: "AI Bot",
+    contactEmail: "launchandlevelupstudio@gmail.com",
+    maxMessagesPerDay: 6
+  };
+</script>
+<script>
+(function () {
+  const cfg = Object.assign(
+    {
+      endpoint: 'https://llu-chat-api-launch-and-level-up-studio.vercel.app/api/chat',
+      leadEndpoint: 'https://api.web3forms.com/submit',
+      web3formsAccessKey: '14ebd4ce-45fe-46b8-adc1-683fb9c46cdc',
+      clientId: 'launch-level-up',
+      businessName: 'Launch & Level Up Studio',
+      assistantName: 'AI Bot',
+      contactEmail: 'launchandlevelupstudio@gmail.com',
+      maxMessagesPerDay: 6,
+      accent: '#B8912F',
+      accentLight: '#D9B96A',
+      dark: '#0B0B0C',
+    },
+    window.LLUChatbotConfig || {}
+  );
+
+  // ---- Analytics hooks (no third-party service — dispatches events you can
+  // listen for and wire to GA4 / any analytics you add later) ----
+  function track(eventName, detail) {
+    window.dispatchEvent(new CustomEvent('llu:' + eventName, { detail: detail || {} }));
+  }
+
+  // ---- Per-visitor daily message cap (persists across page navigation via
+  // localStorage, resets after 24 hours) — protects against one visitor
+  // accidentally or deliberately running up API cost. ----
+  const CAP_KEY = 'llu_chat_msg_count';
+  const CAP_DATE_KEY = 'llu_chat_msg_date';
+
+  function getMessageCount() {
+    try {
+      const storedDate = localStorage.getItem(CAP_DATE_KEY);
+      const today = new Date().toDateString();
+      if (storedDate !== today) {
+        localStorage.setItem(CAP_DATE_KEY, today);
+        localStorage.setItem(CAP_KEY, '0');
+        return 0;
+      }
+      return parseInt(localStorage.getItem(CAP_KEY) || '0', 10);
+    } catch (e) {
+      return 0; // if localStorage is unavailable, don't block the visitor
+    }
+  }
+
+  function incrementMessageCount() {
+    try {
+      const current = getMessageCount();
+      localStorage.setItem(CAP_KEY, String(current + 1));
+    } catch (e) { /* ignore */ }
+  }
+
+  function capReached() {
+    return getMessageCount() >= cfg.maxMessagesPerDay;
+  }
+
+  const style = document.createElement('style');
+  style.textContent = `
+    .llu-chat-btn{position:fixed;bottom:24px;right:24px;width:66px;height:66px;border-radius:50%;background:linear-gradient(160deg,#1a1a1e,${cfg.dark});border:1.5px solid rgba(184,145,47,0.5);box-shadow:0 12px 34px -8px rgba(0,0,0,0.55);cursor:pointer;z-index:9999;display:flex;align-items:center;justify-content:center;transition:transform .3s ease,box-shadow .3s ease;animation:lluBotBob 3.4s ease-in-out infinite;}
+    .llu-chat-btn:hover{transform:scale(1.07);box-shadow:0 16px 40px -8px rgba(0,0,0,0.6),0 0 0 8px rgba(184,145,47,0.12);}
+    .llu-chat-btn.open{animation:none;}
+    @keyframes lluBotBob{ 0%,100%{transform:translateY(0);} 50%{transform:translateY(-5px);} }
+
+    .llu-bot-svg{ width:38px; height:38px; overflow:visible; }
+    .llu-bot-eye{ animation: lluBlink 4.5s ease-in-out infinite; transform-origin: center; }
+    .llu-bot-eye.r{ animation-delay: .08s; }
+    @keyframes lluBlink{ 0%,92%,100%{transform:scaleY(1);} 95%{transform:scaleY(0.12);} }
+    .llu-bot-antenna-tip{ animation: lluPulseTip 2s ease-in-out infinite; transform-origin: center; }
+    @keyframes lluPulseTip{ 0%,100%{opacity:0.6;transform:scale(0.85);} 50%{opacity:1;transform:scale(1.15);} }
+
+    .llu-chat-panel{position:fixed;bottom:100px;right:24px;width:380px;max-width:92vw;height:560px;max-height:75vh;background:#fff;border-radius:14px;box-shadow:0 30px 70px -20px rgba(0,0,0,0.4);display:flex;flex-direction:column;overflow:hidden;z-index:9999;font-family:-apple-system,BlinkMacSystemFont,'Inter',sans-serif;transform:translateY(16px) scale(0.97);opacity:0;pointer-events:none;transition:transform .3s cubic-bezier(.16,.8,.24,1),opacity .3s ease;}
+    .llu-chat-panel.open{transform:translateY(0) scale(1);opacity:1;pointer-events:auto;}
+
+    .llu-chat-header{background:linear-gradient(135deg,#16161a,${cfg.dark});color:#fff;padding:16px 18px;display:flex;align-items:center;gap:12px;position:relative;overflow:hidden;flex-shrink:0;}
+    .llu-chat-header::after{content:"";position:absolute;top:0;left:-40%;width:40%;height:100%;background:linear-gradient(90deg,transparent,rgba(184,145,47,0.18),transparent);animation:lluScan 4s ease-in-out infinite;}
+    @keyframes lluScan{ 0%{left:-40%;} 100%{left:100%;} }
+    .llu-chat-header-icon{width:34px;height:34px;border-radius:50%;background:rgba(184,145,47,0.12);border:1px solid rgba(184,145,47,0.4);display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;z-index:1;}
+    .llu-chat-header-icon svg{width:20px;height:20px;}
+    .llu-chat-header-text{position:relative;z-index:1;flex:1;min-width:0;}
+    .llu-chat-header-text .name{font-weight:700;font-size:14.5px;}
+    .llu-chat-header-text .status{display:flex;align-items:center;gap:5px;font-size:11.5px;color:rgba(255,255,255,0.6);margin-top:2px;}
+    .llu-chat-header-text .status .dot{width:6px;height:6px;border-radius:50%;background:#6de08a;box-shadow:0 0 6px #6de08a;animation:lluStatusPulse 1.8s ease-in-out infinite;}
+    @keyframes lluStatusPulse{ 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+    .llu-chat-close{background:none;border:none;color:rgba(255,255,255,0.7);cursor:pointer;font-size:20px;line-height:1;position:relative;z-index:1;padding:4px;}
+
+    .llu-chat-messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;background:#FAF9F5;}
+    .llu-msg-row{display:flex;gap:8px;align-items:flex-end;}
+    .llu-msg-row.user{flex-direction:row-reverse;}
+    .llu-msg-avatar{width:22px;height:22px;border-radius:50%;background:${cfg.dark};display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .llu-msg-avatar svg{width:13px;height:13px;}
+    .llu-msg{max-width:78%;padding:10px 13px;border-radius:10px;font-size:14px;line-height:1.5;white-space:pre-wrap;}
+    .llu-msg.bot{background:#fff;border:1px solid rgba(11,11,12,0.08);color:#0B0B0C;border-bottom-left-radius:3px;}
+    .llu-msg.bot a,.llu-cap-notice a{color:#B8912F;font-weight:600;text-decoration:underline;text-underline-offset:2px;}
+    .llu-msg.bot a:hover,.llu-cap-notice a:hover{color:#8F6F1F;}
+    .llu-msg.user{background:${cfg.dark};color:#fff;border-bottom-right-radius:3px;}
+
+    .llu-quick-replies{display:flex;flex-wrap:wrap;gap:8px;padding:2px 0 4px 30px;}
+    .llu-quick-btn{background:#fff;border:1px solid rgba(184,145,47,0.4);color:${cfg.dark};border-radius:20px;padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer;transition:background .2s ease,border-color .2s ease;}
+    .llu-quick-btn:hover{background:rgba(184,145,47,0.08);border-color:${cfg.accent};}
+
+    .llu-processing{display:flex;gap:4px;padding:12px 13px;background:#fff;border:1px solid rgba(11,11,12,0.08);border-radius:10px;border-bottom-left-radius:3px;width:fit-content;}
+    .llu-processing span{width:6px;height:6px;border-radius:50%;background:${cfg.accent};animation:lluProcessing 1.2s ease-in-out infinite;}
+    .llu-processing span:nth-child(2){animation-delay:.15s;}
+    .llu-processing span:nth-child(3){animation-delay:.3s;}
+    @keyframes lluProcessing{ 0%,60%,100%{transform:scale(0.6);opacity:0.4;} 30%{transform:scale(1);opacity:1;} }
+
+    .llu-chat-footer{flex-shrink:0;border-top:1px solid rgba(11,11,12,0.08);background:#fff;}
+    .llu-chat-inputrow{display:flex;padding:10px;gap:8px;}
+    .llu-chat-inputrow input{flex:1;border:1px solid rgba(11,11,12,0.15);border-radius:8px;padding:10px 12px;font-size:14px;font-family:inherit;outline:none;}
+    .llu-chat-inputrow input:focus{border-color:${cfg.accent};}
+    .llu-chat-inputrow button{background:${cfg.accent};border:none;border-radius:8px;padding:0 16px;font-weight:700;font-size:13px;cursor:pointer;color:${cfg.dark};}
+    .llu-quote-link{display:block;text-align:center;font-size:11.5px;color:rgba(11,11,12,0.55);padding:0 0 10px;cursor:pointer;text-decoration:underline;}
+    .llu-quote-link:hover{color:${cfg.dark};}
+
+    .llu-lead-form{padding:16px;display:flex;flex-direction:column;gap:10px;overflow-y:auto;flex:1;background:#FAF9F5;}
+    .llu-lead-form h4{margin:0 0 2px;font-size:15px;color:${cfg.dark};}
+    .llu-lead-form p.sub{margin:0 0 6px;font-size:12.5px;color:rgba(11,11,12,0.6);}
+    .llu-lead-form label{font-size:12px;font-weight:700;color:${cfg.dark};margin-bottom:-4px;}
+    .llu-lead-form input, .llu-lead-form textarea{border:1px solid rgba(11,11,12,0.15);border-radius:8px;padding:9px 11px;font-size:13.5px;font-family:inherit;outline:none;resize:none;}
+    .llu-lead-form input:focus, .llu-lead-form textarea:focus{border-color:${cfg.accent};}
+    .llu-lead-actions{display:flex;gap:8px;margin-top:4px;}
+    .llu-lead-actions button{flex:1;border-radius:8px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;border:none;}
+    .llu-lead-submit{background:${cfg.accent};color:${cfg.dark};}
+    .llu-lead-cancel{background:transparent;color:rgba(11,11,12,0.6);border:1px solid rgba(11,11,12,0.15) !important;}
+
+    .llu-chat-inputrow input:disabled, .llu-chat-inputrow button:disabled{opacity:0.5;cursor:not-allowed;}
+    .llu-cap-notice{padding:10px 13px;background:#fdf3e2;border:1px solid rgba(184,145,47,0.35);border-radius:10px;font-size:13px;color:${cfg.dark};line-height:1.5;}
+
+    @media (max-width:480px){ .llu-chat-panel{ right:0; bottom:0; width:100vw; max-width:100vw; height:88vh; max-height:88vh; border-radius:16px 16px 0 0; } .llu-chat-btn{ right:16px; bottom:16px; } }
+  `;
+  document.head.appendChild(style);
+
+  function robotSvg(strokeColor, eyeColor) {
+    return `
+      <svg class="llu-bot-svg" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <line x1="30" y1="6" x2="30" y2="14" stroke="${strokeColor}" stroke-width="2.5" stroke-linecap="round"/>
+        <circle class="llu-bot-antenna-tip" cx="30" cy="5" r="3" fill="${eyeColor}"/>
+        <rect x="9" y="14" width="42" height="34" rx="13" stroke="${strokeColor}" stroke-width="2.5"/>
+        <ellipse class="llu-bot-eye l" cx="22" cy="30" rx="3.6" ry="4.4" fill="${eyeColor}"/>
+        <ellipse class="llu-bot-eye r" cx="38" cy="30" rx="3.6" ry="4.4" fill="${eyeColor}"/>
+        <path d="M22 40c2.5 2 13.5 2 16 0" stroke="${strokeColor}" stroke-width="2.2" stroke-linecap="round"/>
+      </svg>`;
+  }
+
+  const btn = document.createElement('button');
+  btn.className = 'llu-chat-btn';
+  btn.setAttribute('aria-label', 'Open ' + cfg.assistantName);
+  btn.innerHTML = '<img class="llu-chat-avatar" src="assets/chatbot-avatar.jpg" alt="AI Bot">';
+
+  const panel = document.createElement('div');
+  panel.className = 'llu-chat-panel';
+  panel.innerHTML = `
+    <div class="llu-chat-header">
+      <div class="llu-chat-header-icon"><img src=\"assets/chatbot-avatar.jpg\" alt=\"\"></div>
+      <div class="llu-chat-header-text">
+        <div class="name">${cfg.assistantName}</div>
+      </div>
+      <button class="llu-chat-close" aria-label="Close chat">&times;</button>
+    </div>
+    <div class="llu-chat-messages"></div>
+    <div class="llu-lead-form" style="display:none;"></div>
+    <div class="llu-chat-footer">
+      <div class="llu-quote-link">Prefer to just share your info? Request a quote</div>
+      <div class="llu-chat-inputrow">
+        <input type="text" placeholder="Type a message..." aria-label="Message" />
+        <button type="button">Send</button>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(btn);
+  document.body.appendChild(panel);
+
+  const messagesEl = panel.querySelector('.llu-chat-messages');
+  const leadFormEl = panel.querySelector('.llu-lead-form');
+  const footerEl = panel.querySelector('.llu-chat-footer');
+  const inputEl = panel.querySelector('.llu-chat-inputrow input');
+  const sendBtn = panel.querySelector('.llu-chat-inputrow button');
+  const closeBtn = panel.querySelector('.llu-chat-close');
+  const quoteLink = panel.querySelector('.llu-quote-link');
+
+  let history = [];
+  let uiLog = [];
+  let opened = false;
+  let sending = false;
+  let conversationStarted = false;
+
+  const HISTORY_KEY = 'llu_chat_thread_v1';
+  const HISTORY_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;
+
+  function persistChat() {
+    try {
+      localStorage.setItem(HISTORY_KEY, JSON.stringify({
+        updatedAt: Date.now(),
+        conversationStarted: conversationStarted,
+        history: history.slice(-40),
+        uiLog: uiLog.slice(-50)
+      }));
+    } catch (e) { /* ignore */ }
+  }
+
+  function loadPersistedChat() {
+    try {
+      const raw = localStorage.getItem(HISTORY_KEY);
+      if (!raw) return null;
+      const data = JSON.parse(raw);
+      if (!data || !Array.isArray(data.uiLog) || !data.uiLog.length) return null;
+      if (Date.now() - (data.updatedAt || 0) > HISTORY_MAX_AGE_MS) {
+        localStorage.removeItem(HISTORY_KEY);
+        return null;
+      }
+      return data;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function restoreChat() {
+    const data = loadPersistedChat();
+    if (!data) return false;
+    history = Array.isArray(data.history) ? data.history.slice() : [];
+    conversationStarted = !!data.conversationStarted;
+    uiLog = [];
+    data.uiLog.forEach(function (m) {
+      const role = m.role === 'user' ? 'user' : 'bot';
+      const text = m.text || m.content || '';
+      if (!text) return;
+      addMessage(role, text, { skipPersist: true });
+    });
+    return messagesEl.children.length > 0;
+  }
+
+  const QUICK_REPLIES = [
+    { label: '🌐 Website Design', value: 'Website Design' },
+    { label: '🎨 Logo & Branding', value: 'Logo & Branding' },
+    { label: '🚀 Launch My Business', value: 'Launch My Business' },
+    { label: '📱 Digital Presence', value: 'Digital Presence' },
+    { label: '💬 Something Else', value: 'Something else' },
+  ];
+
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function formatBotHtml(text) {
+    let s = escapeHtml(text);
+    // Markdown links [label](url)
+    s = s.replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g, function (_, label, url) {
+      return '<a href="' + url + '" target="_blank" rel="noopener noreferrer">' + label + '</a>';
+    });
+    // Bold **text** → <strong> (removes the asterisks)
+    s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+    // Drop any leftover stray ** the model may leave
+    s = s.replace(/\*\*/g, '');
+    function mapOutsideAnchors(html, fn) {
+      return html.split(/(<a\b[^>]*>.*?<\/a>)/gi).map(function (part) {
+        if (/^<a\b/i.test(part)) return part;
+        return fn(part);
+      }).join('');
+    }
+    s = mapOutsideAnchors(s, function (part) {
+      return part.replace(/(https?:\/\/[^\s<]+)/g, function (url) {
+        const clean = url.replace(/[.,);:!?]+$/, '');
+        const trail = url.slice(clean.length);
+        return '<a href="' + clean + '" target="_blank" rel="noopener noreferrer">' + clean + '</a>' + trail;
+      });
+    });
+    s = mapOutsideAnchors(s, function (part) {
+      return part.replace(/((?:www\.)?launchandlevelupstudio\.com\/[^\s<]*)/gi, function (path) {
+        const clean = path.replace(/[.,);:!?]+$/, '');
+        const trail = path.slice(clean.length);
+        const href = 'https://' + clean.replace(/^www\./i, '');
+        return '<a href="' + href + '" target="_blank" rel="noopener noreferrer">' + clean + '</a>' + trail;
+      });
+    });
+    s = mapOutsideAnchors(s, function (part) {
+      return part.replace(/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g, function (email) {
+        return '<a href="mailto:' + email + '">' + email + '</a>';
+      });
+    });
+    const phrases = [
+      [/\bservices page\b/gi, 'https://launchandlevelupstudio.com/services.html'],
+      [/\bportfolio page\b/gi, 'https://launchandlevelupstudio.com/portfolio.html'],
+      [/\bcontact page\b/gi, 'https://launchandlevelupstudio.com/contact.html'],
+      [/\babout page\b/gi, 'https://launchandlevelupstudio.com/about.html'],
+      [/\bblog page\b/gi, 'https://launchandlevelupstudio.com/blog.html']
+    ];
+    s = mapOutsideAnchors(s, function (part) {
+      let out = part;
+      phrases.forEach(function (pair) {
+        out = out.replace(pair[0], function (match) {
+          return '<a href="' + pair[1] + '" target="_blank" rel="noopener noreferrer">' + match + '</a>';
+        });
+      });
+      return out;
+    });
+    return s;
+  }
+
+  function addMessage(role, text, opts) {
+    opts = opts || {};
+    const row = document.createElement('div');
+    row.className = 'llu-msg-row ' + (role === 'user' ? 'user' : 'bot');
+    const avatar = document.createElement('div');
+    avatar.className = 'llu-msg-avatar';
+    avatar.innerHTML = role === 'user'
+      ? '<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>'
+      : robotSvg('#D9B96A', '#D9B96A');
+    const bubble = document.createElement('div');
+    bubble.className = 'llu-msg ' + (role === 'user' ? 'user' : 'bot');
+    if (role === 'user') {
+      bubble.textContent = text;
+    } else {
+      bubble.innerHTML = formatBotHtml(text);
+    }
+    row.appendChild(avatar);
+    row.appendChild(bubble);
+    messagesEl.appendChild(row);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+    if (!opts.skipLog) {
+      uiLog.push({ role: role === 'user' ? 'user' : 'bot', text: String(text) });
+    }
+    if (!opts.skipPersist) persistChat();
+    return row;
+  }
+
+  function addQuickReplies() {
+    const wrap = document.createElement('div');
+    wrap.className = 'llu-quick-replies';
+    QUICK_REPLIES.forEach((q) => {
+      const b = document.createElement('button');
+      b.className = 'llu-quick-btn';
+      b.textContent = q.label;
+      b.addEventListener('click', () => {
+        track('service_selected', { service: q.value });
+        wrap.remove();
+        sendMessage(q.value);
+      });
+      wrap.appendChild(b);
+    });
+    messagesEl.appendChild(wrap);
     messagesEl.scrollTop = messagesEl.scrollHeight;
   }
 
-  function addBot(text, html, noPersist) {
-    const row = document.createElement('div');
-    row.className = 'disc-row bot';
-    row.innerHTML = '<div class="disc-avatar"><img src="assets/chatbot-avatar.jpg" alt=""></div>';
-    const bubble = document.createElement('div');
-    bubble.className = 'disc-bubble bot';
-    if (html) bubble.innerHTML = text;
-    else bubble.textContent = text;
-    row.appendChild(bubble);
-    messagesEl.appendChild(row);
-    scrollMessages();
-    if (!noPersist) persist();
-    return bubble;
+  function showGreeting() {
+    addMessage('bot',
+      `👋 Welcome to ${cfg.businessName}.\n\nI'm your ${cfg.assistantName}. I can help you find the right design service, answer questions, or help you get your business project started.\n\nWhat are you looking to level up?`
+    );
+    addQuickReplies();
   }
 
-  function addUser(text, noPersist) {
-    const row = document.createElement('div');
-    row.className = 'disc-row user';
-    const bubble = document.createElement('div');
-    bubble.className = 'disc-bubble user';
-    bubble.textContent = text;
-    row.appendChild(bubble);
-    messagesEl.appendChild(row);
-    scrollMessages();
-    if (!noPersist) persist();
-  }
-
-  function clearChips() {
-    chipsEl.innerHTML = '';
-    chipsEl.hidden = true;
-  }
-
-  function showChips(options, handler) {
-    chipsEl.innerHTML = '';
-    const onPick = handler || function (opt) { handleAnswer(opt); };
-    options.forEach(function (opt) {
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'disc-chip';
-      btn.textContent = opt;
-      btn.addEventListener('click', function () {
-        if (busy) return;
-        onPick(opt);
-      });
-      chipsEl.appendChild(btn);
-    });
-    chipsEl.hidden = false;
-  }
-
-  function setInputEnabled(on) {
-    inputEl.disabled = !on;
-    sendBtn.disabled = !on;
-  }
-
-  function shouldSkipStep(step) {
-    if (!step) return true;
-    if (typeof step.skipIf === 'function') {
-      try { return !!step.skipIf(answers); } catch (e) { return false; }
-    }
-    return false;
-  }
-
-  function advanceToNextAskable(fromIndex) {
-    let i = typeof fromIndex === 'number' ? fromIndex : stepIndex;
-    while (i < steps.length && shouldSkipStep(steps[i])) {
-      const skipped = steps[i];
-      if (skipped && skipped.key && answers[skipped.key] === undefined) {
-        answers[skipped.key] = '—';
-      }
-      i += 1;
-    }
-    stepIndex = i;
-    return i < steps.length;
-  }
-
-  function progressLabel() {
-    const answered = Object.keys(answers).filter(function (k) {
-      return !k.startsWith('_') && answers[k] && answers[k] !== '—';
-    }).length;
-    const total = Object.keys(labels).filter(function (k) { return !k.startsWith('_'); }).length;
-    return '(' + Math.min(answered + 1, total) + '/' + total + ')';
-  }
-
-  function currentQuestionText() {
-    const step = steps[stepIndex];
-    if (!step) return '';
-    return typeof step.q === 'function' ? step.q(answers) : step.q;
-  }
-
-  function showCurrentControls() {
-    const step = steps[stepIndex];
-    if (!step) return;
-    clearChips();
-    const chipList = [];
-    if (step.type === 'chips' && step.chips) {
-      step.chips.forEach(function (c) { chipList.push(c); });
-    }
-    if (step.chipsExtra && step.chipsExtra.length) {
-      step.chipsExtra.forEach(function (c) { chipList.push(c); });
-    }
-    if (step.optional) chipList.push('Skip');
-    if (chipList.length) showChips(chipList);
-
-    if (step.type === 'chips' && !step.chipsExtra && !step.optional) {
-      inputEl.placeholder = 'Or type your answer… ' + progressLabel();
-    } else if (step.type === 'email') {
-      inputEl.placeholder = 'you@example.com ' + progressLabel();
-    } else {
-      inputEl.placeholder = 'Type your answer… ' + progressLabel();
-    }
-    setInputEnabled(true);
-    inputEl.focus();
-    persist();
-  }
-
-  function maybeSectionIntro(noPersistBot) {
-    const step = steps[stepIndex];
-    if (!step || !step.sectionIntro) return;
-    if (lastSectionIntro === step.sectionIntro) return;
-    // Avoid re-introducing if the intro line is already the latest bot message
-    const rows = messagesEl.querySelectorAll('.disc-row.bot .disc-bubble');
-    const last = rows.length ? rows[rows.length - 1] : null;
-    if (last && !last.querySelector('a') && String(last.textContent || '').trim() === step.sectionIntro) {
-      lastSectionIntro = step.sectionIntro;
-      return;
-    }
-    addBot(step.sectionIntro, false, noPersistBot);
-    lastSectionIntro = step.sectionIntro;
-  }
-
-  function askCurrent(noPersistBot) {
-    if (!advanceToNextAskable(stepIndex)) {
-      afterIntake();
-      return;
-    }
-    maybeSectionIntro(noPersistBot);
-    addBot(currentQuestionText(), false, noPersistBot);
-    showCurrentControls();
-  }
-
-  function showMenu() {
-    phase = 'menu';
-    messagesEl.innerHTML = '';
-    clearChips();
-    const keys = listResumableKeys();
-    addBot('Welcome back. Resume a saved questionnaire, or start a new one?', false, true);
-    if (keys.length) {
-      const map = loadSaves();
-      const names = keys.map(function (k) {
-        return (map[k] && map[k].answers && map[k].answers.businessName) || k;
-      });
-      addBot('Saved on this device: ' + names.join(', ') + '.', false, true);
-    }
-    showChips(['Resume', 'Start new'], handleMenuChoice);
-    setInputEnabled(false);
-  }
-
-  function startFresh() {
-    skipPersist = true;
-    clearAnswers();
-    clearSave(DRAFT_KEY);
-    messagesEl.innerHTML = '';
-    phase = 'intake';
-    skipPersist = false;
-    askCurrent();
-  }
-
-  function enterChat() {
-    const keys = listResumableKeys();
-    const map = loadSaves();
-    if (keys.length || map[DRAFT_KEY]) showMenu();
-    else startFresh();
-  }
-
-  function handleMenuChoice(choice) {
-    if (busy) return;
-    clearChips();
-    addUser(choice, true);
-    if (/start/i.test(choice)) {
-      startFresh();
-      return;
-    }
-    phase = 'resume_ask';
-    addBot("What's the business name you used before?", false, true);
-    setInputEnabled(true);
-    inputEl.placeholder = 'Business name…';
-    inputEl.focus();
-  }
-
-  function findSave(businessName) {
-    const key = normalizeBiz(businessName);
-    const map = loadSaves();
-    if (map[key]) return { key: key, save: map[key] };
-    let found = null;
-    Object.keys(map).forEach(function (k) {
-      if (found || k === DRAFT_KEY) return;
-      const bn = normalizeBiz((map[k].answers && map[k].answers.businessName) || '');
-      if (bn && bn === key) found = { key: k, save: map[k] };
-    });
-    return found;
-  }
-
-  function mailtoHref() {
-    const first = answers.firstName || '';
-    const biz = answers.businessName || '';
-    const subject = 'Assets for ' + first + ' from ' + biz;
-    const body =
-      'Hi Launch & Level Up Studio,\n\n' +
-      'Please find my site assets attached. I labeled each file (logo, hero photos, team, product shots, work samples, stock photos, inspiration).\n\n' +
-      'Checklist:\n' +
-      'Logo:\n' +
-      'Photos of work/products:\n' +
-      'Headshots/team:\n' +
-      'Stock photos (if any):\n' +
-      'Inspiration / sites you like:\n' +
-      'Anything else:\n\n' +
-      'Thanks,\n' + first;
-    return 'mailto:' + STUDIO_EMAIL + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
-  }
-
-  function showAssetsPrompt() {
-    const assetsHtml =
-      'Please don\'t leave without sending logo, photos, and work samples for the site.<br><br>' +
-      '<strong>Label every file</strong> before you attach it — e.g. Logo, Hero photos, Team, Product shots, Work samples, Stock photos, Inspiration — so we know what each asset is for.<br><br>' +
-      'If you have stock photos you want on the site, include those too and mark them as Stock.<br><br>' +
-      'Use the button below; the email opens with a checklist you can fill in.<br><br>' +
-      '<a class="disc-mailto" href="' + mailtoHref() + '">Email assets to the studio</a>';
-    addBot(assetsHtml, true);
-  }
-
-  function tryResume(businessName) {
-    const hit = findSave(businessName);
-    if (!hit) {
-      addBot("I couldn't find a save for that business name on this device.", false, true);
-      addBot('Try again, or start a new questionnaire.', false, true);
-      phase = 'menu';
-      showChips(['Try again', 'Start new'], function (c) {
-        clearChips();
-        addUser(c, true);
-        if (/start/i.test(c)) startFresh();
-        else {
-          phase = 'resume_ask';
-          addBot("What's the business name you used before?", false, true);
-          setInputEnabled(true);
-          inputEl.focus();
+  function toggle() {
+    opened = !opened;
+    panel.classList.toggle('open', opened);
+    btn.classList.toggle('open', opened);
+    if (opened) {
+      track('chat_opened');
+      if (messagesEl.children.length === 0) {
+        if (!restoreChat()) {
+          showGreeting();
+        } else if (!conversationStarted && !messagesEl.querySelector('.llu-quick-replies')) {
+          addQuickReplies();
         }
-      });
-      setInputEnabled(false);
-      return;
-    }
-
-    const save = hit.save;
-    skipPersist = true;
-    clearAnswers();
-    Object.assign(answers, save.answers || {});
-    stepIndex = typeof save.stepIndex === 'number' ? save.stepIndex : 0;
-    phase = save.phase || 'intake';
-    followupCount = save.followupCount || 0;
-    submitted = !!save.submitted;
-    activeSaveKey = normalizeBiz(answers.businessName) || hit.key;
-    messagesEl.innerHTML = '';
-    (save.messages || []).forEach(function (m) {
-      if (m.role === 'user') addUser(m.text, true);
-      else addBot(m.text, !!m.html, true);
-    });
-    const first = answers.firstName || 'there';
-    const biz = answers.businessName || businessName;
-    advanceToNextAskable(stepIndex);
-    const pendingQ = (phase === 'intake') ? currentQuestionText() : '';
-    let alreadyAsked = false;
-    if (pendingQ) {
-      const msgs = save.messages || [];
-      for (let i = msgs.length - 1; i >= 0; i--) {
-        const m = msgs[i];
-        if (!m || m.role !== 'bot' || m.html) continue;
-        const t = String(m.text || '').trim();
-        if (t === String(pendingQ).trim()) { alreadyAsked = true; break; }
-        break; // only inspect latest non-html bot line
+        if (capReached()) showCapReached();
       }
-    }
-    addBot('Welcome back, ' + first + '. Resuming ' + biz + '…', false, true);
-    skipPersist = false;
-
-    if (phase === 'intake') {
-      if (alreadyAsked) showCurrentControls();
-      else askCurrent(true);
-      return;
-    }
-    if (phase === 'assets' || phase === 'followup') {
-      if (!messagesEl.querySelector('a.disc-mailto')) showAssetsPrompt();
-      phase = 'followup';
-      const left = Math.max(0, MAX_FOLLOWUPS - followupCount);
-      addBot(left
-        ? ('Any questions before we connect you with Daniel? You can ask up to ' + left + ' more. Type done when you\'re finished.')
-        : 'Type done when you\'re ready to wrap up.');
-      setInputEnabled(true);
-      inputEl.placeholder = 'Ask a question or type done…';
       inputEl.focus();
-      persist();
+    }
+  }
+
+  btn.addEventListener('click', toggle);
+  closeBtn.addEventListener('click', toggle);
+
+  function showCapReached() {
+    inputEl.disabled = true;
+    sendBtn.disabled = true;
+    inputEl.placeholder = 'Daily message limit reached';
+    const notice = document.createElement('div');
+    notice.className = 'llu-cap-notice';
+    notice.innerHTML = formatBotHtml(`You've hit today's 6-message limit. Request a quote in chat, or book a call at https://launchandlevelupstudio.com/contact.html — or email ${cfg.contactEmail}.`);
+    messagesEl.appendChild(notice);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
+
+  async function sendMessage(text) {
+    if (!text || sending) return;
+    if (capReached()) {
+      showCapReached();
       return;
     }
-    handoff();
-  }
+    sending = true;
+    addMessage('user', text);
+    incrementMessageCount();
+    if (!conversationStarted) {
+      conversationStarted = true;
+      track('conversation_started', { firstMessage: text });
+    }
+    history.push({ role: 'user', content: text });
+    persistChat();
 
-  function formatMessageBody() {
-    return Object.keys(labels).map(function (k) {
-      return labels[k] + '\n' + (answers[k] || '—');
-    }).join('\n\n');
-  }
+    const procRow = document.createElement('div');
+    procRow.className = 'llu-msg-row bot';
+    procRow.innerHTML = `<div class="llu-msg-avatar">${robotSvg('#D9B96A', '#D9B96A')}</div><div class="llu-processing"><span></span><span></span><span></span></div>`;
+    messagesEl.appendChild(procRow);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
 
-  async function submitWeb3() {
-    const first = answers.firstName || '';
-    const biz = answers.businessName || '';
-    const subject = 'Questionnaire form for ' + first + ' from ' + biz;
-    const fd = new FormData();
-    fd.append('access_key', W3_KEY);
-    fd.append('subject', subject);
-    fd.append('from_name', first);
-    fd.append('email', answers.email || '');
-    fd.append('replyto', answers.email || '');
-    fd.append('message', formatMessageBody());
-    fd.append('botcheck', '');
-    Object.keys(labels).forEach(function (k) {
-      fd.append(k, answers[k] || '');
-    });
-
-    addBot('Sending…');
-    setInputEnabled(false);
-    clearChips();
-    let ok = false;
     try {
-      const res = await fetch('https://api.web3forms.com/submit', { method: 'POST', body: fd });
-      ok = res.ok;
-      if (ok) {
-        const data = await res.json().catch(function () { return {}; });
-        ok = data.success !== false;
-      }
-    } catch (err) {
-      ok = false;
-    }
-    return ok;
-  }
-
-  async function afterIntake() {
-    phase = 'assets';
-    persist();
-    const ok = await submitWeb3();
-    const name = answers.firstName || 'there';
-    if (!ok) {
-      addBot('Thanks, ' + name + '. We couldn\'t auto-send the form — please email ' + STUDIO_EMAIL + ' with your answers if you can. Continuing with next steps.');
-    } else {
-      submitted = true;
-      addBot('Thanks, ' + name + ' — your answers are in.');
-      persist();
-    }
-    showAssetsPrompt();
-
-    setTimeout(function () {
-      phase = 'followup';
-      addBot('Any questions before we connect you with Daniel? You can ask up to 7. Type done when you\'re finished.');
-      setInputEnabled(true);
-      inputEl.placeholder = 'Ask a question or type done…';
-      inputEl.focus();
-      persist();
-    }, 400);
-  }
-
-  function faqReply(text) {
-    const t = text.toLowerCase();
-    if (/price|cost|budget|how much|fee|rate/.test(t)) {
-      return 'Pricing depends on scope. Typical ranges and packages are on our Services page: https://launchandlevelupstudio.com/services.html — Daniel will refine a quote after reviewing your intake.';
-    }
-    if (/timeline|how long|when|deadline|turnaround/.test(t)) {
-      return 'Timelines vary by pages and assets. Many sites land in a few weeks once content and brand assets are ready; exploring or complex builds take longer. Your selected timeline helps us plan.';
-    }
-    if (/process|how (do|does)|steps|workflow|discover/.test(t)) {
-      return 'Our process is Discover → Design → Launch. We clarify goals and content, design and iterate, then build, review, and go live with handoff.';
-    }
-    if (/send|asset|logo|photo|file|attach|material/.test(t)) {
-      return 'Send logo files, brand colors/fonts if you have them, photos of your work or space, stock photos you want used, and any copy drafts. Label every file (logo, hero, team, products, samples, stock, inspiration). Use the assets email button above or write ' + STUDIO_EMAIL + '.';
-    }
-    if (/contact|email|reach|daniel|call|phone|book/.test(t)) {
-      return 'Email ' + STUDIO_EMAIL + ' or use the contact page: https://launchandlevelupstudio.com/contact.html — Daniel will follow up from there.';
-    }
-    return 'Good question. Daniel can dig into that with you. Meanwhile: Services https://launchandlevelupstudio.com/services.html · Contact https://launchandlevelupstudio.com/contact.html · ' + STUDIO_EMAIL;
-  }
-
-  function handoff() {
-    phase = 'done';
-    clearChips();
-    setInputEnabled(false);
-    addBot('You\'ll discuss next steps with Daniel. Reach us anytime at ' + STUDIO_EMAIL + ' or https://launchandlevelupstudio.com/contact.html — thanks for filling this out.', false, true);
-    if (answers.businessName) clearSave(normalizeBiz(answers.businessName));
-    clearSave(DRAFT_KEY);
-  }
-
-  function isDonePhrase(text) {
-    const t = text.trim().toLowerCase();
-    return /^(done|no|nope|that's all|thats all|that is all|nothing else|no thanks|no thank you|i'm good|im good|all set|finished)$/.test(t);
-  }
-
-  async function handleAnswer(raw) {
-    const text = (raw || '').trim();
-    if (!text || busy) return;
-    busy = true;
-    setInputEnabled(false);
-    clearChips();
-
-    if (phase === 'menu') {
-      busy = false;
-      handleMenuChoice(text);
-      return;
-    }
-
-    if (phase === 'resume_ask') {
-      addUser(text, true);
-      inputEl.value = '';
-      tryResume(text);
-      busy = false;
-      return;
-    }
-
-    addUser(text);
-    inputEl.value = '';
-
-    if (phase === 'intake') {
-      const step = steps[stepIndex];
-      if (!step) {
-        await afterIntake();
-        busy = false;
-        return;
-      }
-
-      let value = text;
-
-      // Chip helpers
-      if (step.chipsExtra && step.chipsExtra.indexOf(text) !== -1 && /same as my reply email/i.test(text)) {
-        value = answers.email || text;
-      }
-      if (step.optional && /^skip$/i.test(text)) {
-        value = '—';
-      }
-
-      if (step.type === 'email' && value !== '—' && !/^same as/i.test(text)) {
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-          addBot('That doesn\'t look like an email. Please enter a valid email address, or choose "Same as my reply email".');
-          setInputEnabled(true);
-          busy = false;
-          showCurrentControls();
-          return;
-        }
-      }
-
-      answers[step.key] = value;
-      if (step.key === 'businessName') {
-        activeSaveKey = normalizeBiz(value) || DRAFT_KEY;
-      }
-      stepIndex += 1;
-      persist();
-
-      if (!advanceToNextAskable(stepIndex)) {
-        await afterIntake();
-        busy = false;
-        return;
-      }
-      askCurrent();
-      busy = false;
-      return;
-    }
-
-    if (phase === 'followup' || phase === 'assets') {
-      if (phase === 'assets') phase = 'followup';
-      if (isDonePhrase(text)) {
-        handoff();
-        busy = false;
-        return;
-      }
-      followupCount += 1;
-      addBot(faqReply(text));
-      if (followupCount >= MAX_FOLLOWUPS) {
-        addBot('That\'s 7 questions — wrapping here.');
-        handoff();
+      const res = await fetch(cfg.endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ clientId: cfg.clientId, messages: history }),
+      });
+      const data = await res.json();
+      procRow.remove();
+      if (data.reply) {
+        addMessage('bot', data.reply);
+        history.push({ role: 'assistant', content: data.reply });
+        persistChat();
       } else {
-        const left = MAX_FOLLOWUPS - followupCount;
-        addBot(left === 1 ? 'You have 1 question left, or type done.' : 'You have ' + left + ' questions left, or type done.');
-        setInputEnabled(true);
-        inputEl.focus();
-        persist();
+        addMessage('bot', 'Sorry, something went wrong. Please try again or use the contact form.');
       }
-      busy = false;
-      return;
+    } catch (e) {
+      procRow.remove();
+      addMessage('bot', "Sorry, I'm having trouble connecting right now. Please try again shortly.");
+    } finally {
+      sending = false;
     }
-
-    busy = false;
   }
 
-  function sendFromInput() {
-    handleAnswer(inputEl.value);
-  }
-
-  sendBtn.addEventListener('click', sendFromInput);
-  inputEl.addEventListener('keydown', function (e) {
+  sendBtn.addEventListener('click', () => {
+    const text = inputEl.value.trim();
+    inputEl.value = '';
+    sendMessage(text);
+  });
+  inputEl.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
-      e.preventDefault();
-      sendFromInput();
+      const text = inputEl.value.trim();
+      inputEl.value = '';
+      sendMessage(text);
     }
   });
 
-  loadSaves();
+  // ---- Lead capture form ----
+  function renderLeadForm() {
+    leadFormEl.innerHTML = `
+      <h4>Request a Quote</h4>
+      <p class="sub">Share a few details and the ${cfg.businessName} team will follow up with you directly.</p>
+      <label>Name</label>
+      <input type="text" id="llu-lead-name" placeholder="Jane Smith" />
+      <label>Email</label>
+      <input type="email" id="llu-lead-email" placeholder="jane@yourbusiness.com" />
+      <label>Business Name</label>
+      <input type="text" id="llu-lead-business" placeholder="Your Business, LLC" />
+      <label>What do you need help with?</label>
+      <textarea id="llu-lead-need" rows="3" placeholder="e.g. New website, logo refresh..."></textarea>
+      <label>Timeline (optional)</label>
+      <input type="text" id="llu-lead-timeline" placeholder="e.g. Within a month" />
+      <div class="llu-lead-actions">
+        <button class="llu-lead-cancel" type="button">Cancel</button>
+        <button class="llu-lead-submit" type="button">Send to the Team</button>
+      </div>
+    `;
+    leadFormEl.style.display = 'flex';
+    messagesEl.style.display = 'none';
+    footerEl.style.display = 'none';
 
-  if (isUnlocked()) unlock();
-  else codeInput.focus();
+    leadFormEl.querySelector('.llu-lead-cancel').addEventListener('click', () => {
+      leadFormEl.style.display = 'none';
+      messagesEl.style.display = 'flex';
+      footerEl.style.display = 'block';
+    });
+
+    leadFormEl.querySelector('.llu-lead-submit').addEventListener('click', async () => {
+      const lead = {
+        name: leadFormEl.querySelector('#llu-lead-name').value.trim(),
+        email: leadFormEl.querySelector('#llu-lead-email').value.trim(),
+        business: leadFormEl.querySelector('#llu-lead-business').value.trim(),
+        need: leadFormEl.querySelector('#llu-lead-need').value.trim(),
+        timeline: leadFormEl.querySelector('#llu-lead-timeline').value.trim(),
+        transcript: history,
+      };
+      if (!lead.name || !lead.email) {
+        alert('Please add at least your name and email.');
+        return;
+      }
+            const submitBtn = leadFormEl.querySelector('.llu-lead-submit');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending...';
+      let delivered = false;
+      try {
+        const transcriptText = Array.isArray(lead.transcript)
+          ? lead.transcript.map(m => ((m.role || m.sender || 'msg') + ': ' + (m.text || m.content || ''))).join(String.fromCharCode(10))
+          : (typeof lead.transcript === 'string' ? lead.transcript : JSON.stringify(lead.transcript || []));
+        const fd = new FormData();
+        fd.append('access_key', cfg.web3formsAccessKey || '14ebd4ce-45fe-46b8-adc1-683fb9c46cdc');
+        fd.append('subject', 'New chat lead - Launch & Level Up Studio');
+        fd.append('from_name', lead.name || 'Chat lead');
+        fd.append('name', lead.name || '');
+        fd.append('email', lead.email || '');
+        fd.append('business', lead.business || '');
+        fd.append('need', lead.need || '');
+        fd.append('timeline', lead.timeline || '');
+        fd.append('message', ['Need: ' + (lead.need || 'n/a'), 'Timeline: ' + (lead.timeline || 'n/a'), '', 'Transcript:', transcriptText].join(String.fromCharCode(10)));
+        fd.append('replyto', lead.email || '');
+        fd.append('botcheck', '');
+        const res = await fetch(cfg.leadEndpoint || 'https://api.web3forms.com/submit', { method: 'POST', body: fd });
+        const data = await res.json().catch(() => ({}));
+        delivered = !!(res.ok && data && data.success);
+      } catch (e) {
+        console.warn('Lead submission failed', e);
+      }
+      track('lead_submitted', { hasEmail: !!lead.email, delivered });
+      leadFormEl.style.display = 'none';
+      messagesEl.style.display = 'flex';
+      footerEl.style.display = 'block';
+      if (delivered) {
+        addMessage('bot', `Thanks, ${lead.name.split(' ')[0] || 'there'}! We've got your details and the team will follow up soon.`);
+      } else {
+        addMessage('bot', `Thanks, ${lead.name.split(' ')[0] || 'there'}! We had trouble confirming delivery on our end — to be safe, please also reach out directly at ${cfg.contactEmail || 'the contact page'} so we don't miss you.`);
+      }
+    });
+  }
+
+  quoteLink.addEventListener('click', () => {
+    track('quote_form_opened');
+    renderLeadForm();
+  });
 })();
+
 </script>
-
-
 </body>
 </html>
