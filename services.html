@@ -859,6 +859,112 @@ footer{
 .bundle-card p{ font-size: 14.5px; color: var(--charcoal-2); margin-top: 12px; }
 .bundle-card .price{ font-family: var(--serif); font-size: 30px; color: var(--ink); margin-top: 20px; }
 
+/* Website and branding packages — dark cards */
+.pkg-grid{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+  align-items: stretch;
+  padding: 8px 0 4px;
+}
+.pkg-card{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: #141416;
+  color: #fff;
+  border: 1px solid rgba(232,217,181,0.2);
+  padding: 32px 26px 26px;
+  min-width: 0;
+}
+.pkg-card h3{
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: clamp(1.35rem, 2vw, 1.7rem);
+  color: #fff;
+  line-height: 1.12;
+}
+.pkg-card .pkg-price{
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 2rem;
+  line-height: 1.1;
+  color: #F3E6C4;
+  margin-top: 16px;
+}
+.pkg-card .pkg-body{
+  font-family: var(--sans);
+  font-weight: 500;
+  font-size: 15.5px;
+  line-height: 1.55;
+  color: #F7F4EE;
+  margin-top: 14px;
+}
+.pkg-card .pkg-body{ margin-bottom: 22px; }
+.pkg-card .btn{
+  margin-top: auto;
+  width: 100%;
+  justify-content: center;
+  font-weight: 700;
+  white-space: normal;
+  text-align: center;
+}
+.btn-outline-gold{
+  border-color: #D9B96A;
+  color: #F4E7C3;
+  background: transparent;
+}
+.btn-outline-gold:hover{
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--ink);
+  transform: translateY(-2px);
+}
+.pkg-card-premium{
+  border: 1.5px solid #D9B96A;
+  background:
+    radial-gradient(120% 90% at 50% -20%, rgba(217,185,106,0.34), transparent 58%),
+    linear-gradient(180deg, #221c10 0%, #0B0B0C 46%);
+  box-shadow:
+    0 0 0 1px rgba(184,145,47,0.35),
+    0 16px 42px -16px rgba(184,145,47,0.62),
+    0 28px 60px -30px rgba(0,0,0,0.7);
+  padding-top: 0;
+  z-index: 1;
+}
+.pkg-ribbon{
+  display: block;
+  margin: 0 -26px 22px;
+  background: var(--gold);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 9px 12px;
+}
+.pkg-card-accent{
+  border-color: rgba(217,185,106,0.72);
+  background:
+    linear-gradient(180deg, rgba(184,145,47,0.2), rgba(184,145,47,0.03) 46%),
+    #141416;
+  box-shadow: 0 0 36px -16px rgba(184,145,47,0.8);
+}
+@media (min-width: 901px){
+  .pkg-card-premium{
+    transform: translateY(-12px) scale(1.045);
+  }
+}
+@media (max-width: 900px){
+  .pkg-grid{ grid-template-columns: 1fr; gap: 16px; }
+  .pkg-card-premium{ transform: none; }
+}
+@media (prefers-reduced-motion: reduce){
+  .pkg-card-premium{ transform: none; }
+}
+
 /* ==========================================================================
    Portfolio page specifics
    ========================================================================== */
@@ -1266,13 +1372,32 @@ img.hero-watermark{ max-width: min(520px, 70vw); opacity: 0.14; }
       <div><span class="eyebrow">Website Design</span><h2 style="margin-top:14px;">Custom, conversion-focused websites</h2></div>
       <span class="range">Industry range: $1,500 – $8,000+</span>
     </div>
-    <div class="price-table-scroll">
-      <table class="price-table">
-        <tr><th>Package</th><th>What's Included</th><th>Investment</th></tr>
-        <tr><td class="pname" data-label="Package">Starter Site</td><td data-label="What&#x27;s Included">Up to 5 custom pages, mobile-responsive, contact/inquiry form, brand-aligned design.</td><td class="pprice" data-label="Investment">$1,000</td></tr>
-        <tr><td class="pname" data-label="Package">Growth Site</td><td data-label="What&#x27;s Included">Up to 10 pages, portfolio/case studies, testimonials, lead-capture CTAs, on-page SEO setup.</td><td class="pprice" data-label="Investment">$2,200</td></tr>
-        <tr><td class="pname" data-label="Package">Premium Site</td><td data-label="What&#x27;s Included">Fully custom build, booking/e-commerce integration, animations, advanced SEO &amp; analytics.</td><td class="pprice" data-label="Investment">$3,500</td></tr>
-      </table>
+    <div class="pkg-grid">
+      <article class="pkg-card">
+        <h3>Starter Site</h3>
+        <p class="pkg-price">$1,000</p>
+        <p class="pkg-body">Up to 5 custom pages, mobile-responsive, contact/inquiry form, brand-aligned design.</p>
+        <a href="contact.html" class="btn btn-outline-gold">Book a Discovery Call
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </article>
+      <article class="pkg-card">
+        <h3>Growth Site</h3>
+        <p class="pkg-price">$2,200</p>
+        <p class="pkg-body">Up to 10 pages, portfolio/case studies, testimonials, lead-capture CTAs, on-page SEO setup.</p>
+        <a href="contact.html" class="btn btn-outline-gold">Book a Discovery Call
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </article>
+      <article class="pkg-card pkg-card-premium">
+        <div class="pkg-ribbon">Premium</div>
+        <h3>Premium Site</h3>
+        <p class="pkg-price">$3,500</p>
+        <p class="pkg-body">Fully custom build, booking/e-commerce integration, animations, advanced SEO &amp; analytics.</p>
+        <a href="contact.html" class="btn btn-gold">Book a Discovery Call
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </article>
     </div>
   </section>
 
@@ -1281,13 +1406,31 @@ img.hero-watermark{ max-width: min(520px, 70vw); opacity: 0.14; }
       <div><span class="eyebrow">Branding &amp; Logo</span><h2 style="margin-top:14px;">Modern identity design</h2></div>
       <span class="range">Industry range: $300 – $2,000</span>
     </div>
-    <div class="price-table-scroll">
-      <table class="price-table">
-        <tr><th>Package</th><th>What's Included</th><th>Investment</th></tr>
-        <tr><td class="pname" data-label="Package">Logo Refresh</td><td data-label="What&#x27;s Included">Modernize an existing logo — updated mark, color palette, typography pairing.</td><td class="pprice" data-label="Investment">$450</td></tr>
-        <tr><td class="pname" data-label="Package">New Logo + Brand Mark</td><td data-label="What&#x27;s Included">Custom logo design, 2 concept directions, 2 revision rounds, full file package.</td><td class="pprice" data-label="Investment">$650</td></tr>
-        <tr><td class="pname" data-label="Package">Brand Refresh</td><td data-label="What&#x27;s Included">Colors, typography, messaging, and a short style guide to unify the brand.</td><td class="pprice" data-label="Investment">$950</td></tr>
-      </table>
+    <div class="pkg-grid">
+      <article class="pkg-card">
+        <h3>Logo Refresh</h3>
+        <p class="pkg-price">$450</p>
+        <p class="pkg-body">Modernize an existing logo — updated mark, color palette, typography pairing.</p>
+        <a href="contact.html" class="btn btn-outline-gold">Book a Discovery Call
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </article>
+      <article class="pkg-card">
+        <h3>New Logo + Brand Mark</h3>
+        <p class="pkg-price">$650</p>
+        <p class="pkg-body">Custom logo design, 2 concept directions, 2 revision rounds, full file package.</p>
+        <a href="contact.html" class="btn btn-outline-gold">Book a Discovery Call
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </article>
+      <article class="pkg-card pkg-card-accent">
+        <h3>Brand Refresh</h3>
+        <p class="pkg-price">$950</p>
+        <p class="pkg-body">Colors, typography, messaging, and a short style guide to unify the brand.</p>
+        <a href="contact.html" class="btn btn-outline-gold">Book a Discovery Call
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </article>
     </div>
   </section>
 
