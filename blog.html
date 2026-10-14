@@ -223,9 +223,16 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
     padding: 40px var(--pad);
     gap: 28px;
     transform: translateX(100%);
-    transition: transform .4s var(--ease);
+    visibility: hidden;
+    /* Hide the closed drawer from keyboard and screen readers without
+       cutting the slide: visibility waits until the transform finishes. */
+    transition: transform .4s var(--ease), visibility 0s linear .4s;
   }
-  .nav-links.open{ transform: translateX(0); }
+  .nav-links.open{
+    transform: translateX(0);
+    visibility: visible;
+    transition: transform .4s var(--ease), visibility 0s linear 0s;
+  }
   .nav-links a{ font-size: 22px; }
   .nav-toggle{
     display: flex; flex-direction: column; justify-content: center; gap: 5px;
@@ -1229,7 +1236,7 @@ img.hero-watermark{ max-width: min(520px, 70vw); opacity: 0.14; }
 
 <nav class="site-nav">
   <div class="wrap">
-    <a href="/" class="brand"><img src="assets/logo.png" alt="Launch &amp; Level Up Studio logo"></a>
+    <a href="/" class="brand"><img src="assets/logo.png" width="1000" height="844" alt="Launch &amp; Level Up Studio logo"></a>
     <ul class="nav-links">
       <li><a href="/">Home</a></li>
       <li><a href="services.html">Services</a></li>
@@ -1251,7 +1258,7 @@ img.hero-watermark{ max-width: min(520px, 70vw); opacity: 0.14; }
     <path d="M40 520 L520 40" stroke="#B8912F" stroke-width="10" stroke-linecap="round" opacity="0.4"/>
   </svg>
   <div class="page-header-glow" aria-hidden="true"></div>
-  <img class="site-logo page-header-logo" src="assets/logo.png" alt="Launch &amp; Level Up Studio logo">
+  <img class="site-logo page-header-logo" src="assets/logo.png" width="1000" height="844" alt="Launch &amp; Level Up Studio logo">
   <div class="wrap">
     <span class="eyebrow on-dark">The Blog</span>
     <h1>Ideas for launching, growing, and leveling up.</h1>
@@ -1265,7 +1272,7 @@ img.hero-watermark{ max-width: min(520px, 70vw); opacity: 0.14; }
 
       <a href="blog-website-refresh.html" class="blog-card tilt-el">
         <div class="blog-card-image">
-          <img src="assets/portfolio-kingdom-hero.jpg" alt="Website refresh example — modern hero section for a small business site" loading="lazy">
+          <img src="assets/portfolio-kingdom-hero.jpg" width="1400" height="689" alt="Website refresh example — modern hero section for a small business site" loading="lazy">
           <span class="blog-card-tag">Website Design</span>
         </div>
         <div class="blog-card-body">
@@ -1278,7 +1285,7 @@ img.hero-watermark{ max-width: min(520px, 70vw); opacity: 0.14; }
 
       <a href="blog-logo-redesign.html" class="blog-card tilt-el">
         <div class="blog-card-image">
-          <img src="assets/blog-logo-cost.jpg" alt="Logo redesign concept showing outdated versus modern brand marks" loading="lazy">
+          <img src="assets/blog-logo-cost.jpg" width="1536" height="1024" alt="Logo redesign concept showing outdated versus modern brand marks" loading="lazy">
           <span class="blog-card-tag">Branding</span>
         </div>
         <div class="blog-card-body">
@@ -1291,7 +1298,7 @@ img.hero-watermark{ max-width: min(520px, 70vw); opacity: 0.14; }
 
       <a href="blog-ai-chatbot.html" class="blog-card tilt-el">
         <div class="blog-card-image">
-          <img src="assets/blog-ai-chatbot.jpg" alt="AI chatbot assisting a small business website visitor" loading="lazy">
+          <img src="assets/blog-ai-chatbot.jpg" width="1536" height="1024" alt="AI chatbot assisting a small business website visitor" loading="lazy">
           <span class="blog-card-tag">AI Automation</span>
         </div>
         <div class="blog-card-body">
@@ -1304,7 +1311,7 @@ img.hero-watermark{ max-width: min(520px, 70vw); opacity: 0.14; }
 
       <a href="blog-cost-of-slow-outdated-website.html" class="blog-card tilt-el">
         <div class="blog-card-image">
-          <img src="assets/blog-slow-website-cost.jpg" alt="Illustration of a slow outdated website costing leads and revenue" loading="lazy">
+          <img src="assets/blog-slow-website-cost.jpg" width="1600" height="900" alt="Illustration of a slow outdated website costing leads and revenue" loading="lazy">
           <span class="blog-card-tag">Business Strategy</span>
         </div>
         <div class="blog-card-body">
@@ -1336,7 +1343,7 @@ img.hero-watermark{ max-width: min(520px, 70vw); opacity: 0.14; }
   <div class="wrap">
     <div class="footer-top">
       <div>
-        <img src="assets/logo.png" alt="Launch &amp; Level Up Studio logo">
+        <img src="assets/logo.png" width="1000" height="844" alt="Launch &amp; Level Up Studio logo" loading="lazy">
         <p>Next-generation design for brands ready to launch, grow, and level up.</p>
       </div>
       <div class="footer-col">
@@ -1379,14 +1386,31 @@ img.hero-watermark{ max-width: min(520px, 70vw); opacity: 0.14; }
 const navToggle = document.querySelector('.nav-toggle');
 const navLinks = document.querySelector('.nav-links');
 if (navToggle && navLinks) {
+  const navQuery = window.matchMedia('(max-width: 880px)');
+  function syncNavA11y() {
+    const closedOffscreen = navQuery.matches && !navLinks.classList.contains('open');
+    if (closedOffscreen) {
+      navLinks.setAttribute('aria-hidden', 'true');
+      navLinks.setAttribute('inert', '');
+    } else {
+      navLinks.removeAttribute('aria-hidden');
+      navLinks.removeAttribute('inert');
+    }
+    navToggle.setAttribute('aria-expanded', navLinks.classList.contains('open') ? 'true' : 'false');
+  }
   navToggle.addEventListener('click', () => {
     navToggle.classList.toggle('open');
     navLinks.classList.toggle('open');
+    syncNavA11y();
   });
   navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
     navToggle.classList.remove('open');
     navLinks.classList.remove('open');
+    syncNavA11y();
   }));
+  if (navQuery.addEventListener) navQuery.addEventListener('change', syncNavA11y);
+  else if (navQuery.addListener) navQuery.addListener(syncNavA11y);
+  syncNavA11y();
 }
 
 // Duplicate ticker content for seamless loop
@@ -1933,13 +1957,13 @@ if (contactForm) {
   const btn = document.createElement('button');
   btn.className = 'llu-chat-btn';
   btn.setAttribute('aria-label', 'Open ' + cfg.assistantName);
-  btn.innerHTML = '<img class="llu-chat-avatar" src="assets/chatbot-avatar.jpg" alt="AI Bot">';
+  btn.innerHTML = '<img class="llu-chat-avatar" src="assets/chatbot-avatar.jpg" width="800" height="533" alt="AI Bot">';
 
   const panel = document.createElement('div');
   panel.className = 'llu-chat-panel';
   panel.innerHTML = `
     <div class="llu-chat-header">
-      <div class="llu-chat-header-icon"><img src=\"assets/chatbot-avatar.jpg\" alt=\"\"></div>
+      <div class="llu-chat-header-icon"><img src=\"assets/chatbot-avatar.jpg\" width=\"800\" height=\"533\" alt=\"\" loading=\"lazy\"></div>
       <div class="llu-chat-header-text">
         <div class="name">${cfg.assistantName}</div>
       </div>

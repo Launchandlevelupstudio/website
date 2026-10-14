@@ -223,9 +223,16 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
     padding: 40px var(--pad);
     gap: 28px;
     transform: translateX(100%);
-    transition: transform .4s var(--ease);
+    visibility: hidden;
+    /* Hide the closed drawer from keyboard and screen readers without
+       cutting the slide: visibility waits until the transform finishes. */
+    transition: transform .4s var(--ease), visibility 0s linear .4s;
   }
-  .nav-links.open{ transform: translateX(0); }
+  .nav-links.open{
+    transform: translateX(0);
+    visibility: visible;
+    transition: transform .4s var(--ease), visibility 0s linear 0s;
+  }
   .nav-links a{ font-size: 22px; }
   .nav-toggle{
     display: flex; flex-direction: column; justify-content: center; gap: 5px;
@@ -1258,7 +1265,7 @@ img.hero-watermark{ max-width: min(520px, 70vw); opacity: 0.14; }
 
 <nav class="site-nav">
   <div class="wrap">
-    <a href="/" class="brand"><img src="assets/logo.png" alt="Launch &amp; Level Up Studio logo"></a>
+    <a href="/" class="brand"><img src="assets/logo.png" width="1000" height="844" alt="Launch &amp; Level Up Studio logo"></a>
     <ul class="nav-links">
       <li><a href="/">Home</a></li>
       <li><a href="services.html">Services</a></li>
@@ -1496,9 +1503,9 @@ var BOA_CONFIG = {
   siteUrl: "https://launchandlevelupstudio.com/",
   bookingUrl: "https://launchandlevelupstudio.com/contact.html",
   email: "launchandlevelupstudio@gmail.com",
-  // Paste an n8n / Formspree / Apps Script URL here to receive leads as JSON.
-  // Left empty, the form falls back to a copyable report and an email link.
-  webhookUrl: "",
+  // Analyzer reports go out through the same Web3Forms inbox as the contact form.
+  leadEndpoint: "https://api.web3forms.com/submit",
+  web3formsAccessKey: "14ebd4ce-45fe-46b8-adc1-683fb9c46cdc",
   // Packages and prices shown in recommendations. Keep in step with your Services page.
   offers: {
     textback: {name: "Missed-call text-back", price: "$750 setup + $75/mo"},
@@ -1845,24 +1852,56 @@ if (typeof module !== "undefined") module.exports = {boaAnalyze: boaAnalyze, BOA
     ev.preventDefault();
     var name = $("lfName").value.trim(), email = $("lfEmail").value.trim(), err = $("lfErr");
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ err.textContent = "Enter an email address so the report has somewhere to go."; err.hidden = false; $("lfEmail").focus(); return; }
+    if (!last){ err.textContent = "Finish the analyzer before sending a report."; err.hidden = false; return; }
     err.hidden = true;
-    var payload = {source:"analyzer", sentAt:new Date().toISOString(), name:name, email:email, business:$("lfBiz").value.trim(), url:$("lfUrl").value.trim(),
-                   answers:last.a, scores:last.r.scores, overall:last.r.overall, level:last.r.level,
-                   leadLossLow:Math.round(last.r.leadLossLow), leadLossHigh:Math.round(last.r.leadLossHigh), autoHours:Math.round(last.r.autoHours),
-                   top:last.r.top.map(function(o){ return {id:o.id, title:o.title, monthly:o.monthly === null ? null : Math.round(o.monthly)}; }), report:reportText()};
+    var business = $("lfBiz").value.trim(), url = $("lfUrl").value.trim(), report = reportText();
+    var scores = last.r.scores;
+    var scoreLine = Object.keys(scores).map(function(k){ return k + " " + scores[k]; }).join(", ");
+    var topLine = last.r.top.map(function(o){
+      return o.title + (o.monthly === null ? "" : " (~$" + Math.round(o.monthly) + "/mo)");
+    }).join("; ");
     var done = $("lfDone"), btn = $("lfBtn");
     function fallback(msg){
       done.innerHTML = ""; var p = document.createElement("p"); p.textContent = msg; done.appendChild(p);
       var aEl = document.createElement("a"); aEl.className = "btn ghost"; aEl.textContent = "Email this report to us";
-      aEl.href = "mailto:" + cfg.email + "?subject=" + encodeURIComponent("Analyzer report: " + (payload.business || name || email)) + "&body=" + encodeURIComponent(reportText() + "\n\nFrom: " + name + " <" + email + ">\nWebsite: " + payload.url);
+      aEl.href = "mailto:" + cfg.email + "?subject=" + encodeURIComponent("Analyzer report: " + (business || name || email)) + "&body=" + encodeURIComponent(report + "\n\nFrom: " + name + " <" + email + ">\nWebsite: " + url);
       done.appendChild(aEl); done.hidden = false; $("copyBox").hidden = false;
     }
-    if (!cfg.webhookUrl){ fallback("This copy of the analyzer is not connected to an inbox yet. Your report is in the box below to copy, or send it with your email app."); return; }
     btn.disabled = true; btn.textContent = "Sending your report";
-    fetch(cfg.webhookUrl, {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(payload)})
-      .then(function(res){ if (!res.ok) throw new Error(res.status); 
-        $("leadForm").hidden = true; done.textContent = "Report sent to " + email + ". Expect it within one business day" + (payload.url ? ", along with your free Website Snapshot." : "."); done.hidden = false; })
-      .catch(function(){ btn.disabled = false; btn.textContent = "Send my report"; fallback("The report could not be sent just now. It is in the box below to copy, or send it with your email app."); });
+    var fd = new FormData();
+    fd.append("access_key", cfg.web3formsAccessKey);
+    fd.append("subject", "Analyzer report - Launch & Level Up Studio");
+    fd.append("from_name", name || "Analyzer report");
+    fd.append("name", name);
+    fd.append("email", email);
+    fd.append("business", business);
+    fd.append("website", url);
+    fd.append("source", "analyzer");
+    fd.append("overall", String(last.r.overall));
+    fd.append("level", String(last.r.level));
+    fd.append("lead_loss_low", String(Math.round(last.r.leadLossLow)));
+    fd.append("lead_loss_high", String(Math.round(last.r.leadLossHigh)));
+    fd.append("auto_hours", String(Math.round(last.r.autoHours)));
+    fd.append("scores", scoreLine);
+    fd.append("top_fixes", topLine);
+    fd.append("answers", JSON.stringify(last.a));
+    fd.append("message", report);
+    fd.append("replyto", email);
+    fd.append("botcheck", "");
+    fetch(cfg.leadEndpoint, {method:"POST", body:fd})
+      .then(function(res){
+        return res.json().catch(function(){ return {}; }).then(function(data){
+          if (!res.ok || !data || !data.success) throw new Error("undelivered");
+          $("leadForm").hidden = true;
+          done.textContent = "Report sent to " + email + ". Expect it within one business day" + (url ? ", along with your free Website Snapshot." : ".");
+          done.hidden = false;
+        });
+      })
+      .catch(function(){
+        btn.disabled = false;
+        btn.textContent = "Send my report";
+        fallback("The report could not be sent just now. It is in the box below to copy, or send it with your email app.");
+      });
   });
 
   syncOut();
@@ -1874,7 +1913,7 @@ if (typeof module !== "undefined") module.exports = {boaAnalyze: boaAnalyze, BOA
   <div class="wrap">
     <div class="footer-top">
       <div>
-        <img src="assets/logo.png" alt="Launch &amp; Level Up Studio logo">
+        <img src="assets/logo.png" width="1000" height="844" alt="Launch &amp; Level Up Studio logo" loading="lazy">
         <p>Next-generation design for brands ready to launch, grow, and level up.</p>
       </div>
       <div class="footer-col">
@@ -1917,14 +1956,31 @@ if (typeof module !== "undefined") module.exports = {boaAnalyze: boaAnalyze, BOA
 const navToggle = document.querySelector('.nav-toggle');
 const navLinks = document.querySelector('.nav-links');
 if (navToggle && navLinks) {
+  const navQuery = window.matchMedia('(max-width: 880px)');
+  function syncNavA11y() {
+    const closedOffscreen = navQuery.matches && !navLinks.classList.contains('open');
+    if (closedOffscreen) {
+      navLinks.setAttribute('aria-hidden', 'true');
+      navLinks.setAttribute('inert', '');
+    } else {
+      navLinks.removeAttribute('aria-hidden');
+      navLinks.removeAttribute('inert');
+    }
+    navToggle.setAttribute('aria-expanded', navLinks.classList.contains('open') ? 'true' : 'false');
+  }
   navToggle.addEventListener('click', () => {
     navToggle.classList.toggle('open');
     navLinks.classList.toggle('open');
+    syncNavA11y();
   });
   navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
     navToggle.classList.remove('open');
     navLinks.classList.remove('open');
+    syncNavA11y();
   }));
+  if (navQuery.addEventListener) navQuery.addEventListener('change', syncNavA11y);
+  else if (navQuery.addListener) navQuery.addListener(syncNavA11y);
+  syncNavA11y();
 }
 
 // Duplicate ticker content for seamless loop
@@ -2451,13 +2507,13 @@ if (contactForm) {
   const btn = document.createElement('button');
   btn.className = 'llu-chat-btn';
   btn.setAttribute('aria-label', 'Open ' + cfg.assistantName);
-  btn.innerHTML = '<img class="llu-chat-avatar" src="assets/chatbot-avatar.jpg" alt="AI Bot">';
+  btn.innerHTML = '<img class="llu-chat-avatar" src="assets/chatbot-avatar.jpg" width="800" height="533" alt="AI Bot">';
 
   const panel = document.createElement('div');
   panel.className = 'llu-chat-panel';
   panel.innerHTML = `
     <div class="llu-chat-header">
-      <div class="llu-chat-header-icon"><img src=\"assets/chatbot-avatar.jpg\" alt=\"\"></div>
+      <div class="llu-chat-header-icon"><img src=\"assets/chatbot-avatar.jpg\" width=\"800\" height=\"533\" alt=\"\" loading=\"lazy\"></div>
       <div class="llu-chat-header-text">
         <div class="name">${cfg.assistantName}</div>
       </div>
