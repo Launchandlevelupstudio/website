@@ -3,17 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Terms — Launch &amp; Level Up Studio</title>
+<title>Terms | Launch &amp; Level Up Studio</title>
 <meta name="description" content="Website terms for launchandlevelupstudio.com, the studio site of Launch &amp; Level Up Studio.">
 <link rel="canonical" href="https://launchandlevelupstudio.com/terms.html">
-<meta property="og:title" content="Terms — Launch &amp; Level Up Studio">
+<meta property="og:title" content="Terms | Launch &amp; Level Up Studio">
 <meta property="og:description" content="Website terms for launchandlevelupstudio.com, the studio site of Launch &amp; Level Up Studio.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://launchandlevelupstudio.com/terms.html">
 <meta property="og:image" content="https://launchandlevelupstudio.com/assets/logo.png">
 <meta property="og:site_name" content="Launch &amp; Level Up Studio">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Terms — Launch &amp; Level Up Studio">
+<meta name="twitter:title" content="Terms | Launch &amp; Level Up Studio">
 <meta name="twitter:description" content="Website terms for launchandlevelupstudio.com, the studio site of Launch &amp; Level Up Studio.">
 <meta name="twitter:image" content="https://launchandlevelupstudio.com/assets/logo.png">
 <link rel="icon" type="image/png" href="assets/favicon.png">
@@ -1220,7 +1220,7 @@ img.hero-watermark{ max-width: min(520px, 70vw); opacity: 0.14; }
   "url": "https://launchandlevelupstudio.com",
   "logo": "https://launchandlevelupstudio.com/assets/logo.png",
   "email": "launchandlevelupstudio@gmail.com",
-  "description": "Next-generation design for businesses ready to launch, grow & level up. Website design, logo redesign, brand refresh, business launch support, and digital presence setup \u2014 serving small businesses across the United States, 100% remote.",
+  "description": "Next-generation design for businesses ready to launch, grow & level up. Website design, logo redesign, brand refresh, business launch support, and digital presence setup, serving small businesses across the United States, 100% remote.",
   "areaServed": "US"
 }
 </script>
@@ -1263,7 +1263,7 @@ img.hero-watermark{ max-width: min(520px, 70vw); opacity: 0.14; }
   <div class="wrap" style="max-width:760px;">
 
     <h2 style="margin-bottom:14px;">Using this website</h2>
-    <p style="color:var(--charcoal-2);">These terms apply to the public site at launchandlevelupstudio.com, operated by Launch &amp; Level Up Studio, a Maryland design studio. They are ground rules for the website — not a full client contract and not legal advice.</p>
+    <p style="color:var(--charcoal-2);">These terms apply to the public site at launchandlevelupstudio.com, operated by Launch &amp; Level Up Studio, a Maryland design studio. They are ground rules for the website, not a full client contract and not legal advice.</p>
 
     <h2 style="margin:36px 0 14px;">Information on the site</h2>
     <p style="color:var(--charcoal-2);">The site describes our studio, services, writing, and the free analyzer. Details can change. Package prices on the Services page are published starting prices. Final scope and fees are confirmed in writing before work begins.</p>
@@ -1278,7 +1278,7 @@ img.hero-watermark{ max-width: min(520px, 70vw); opacity: 0.14; }
     <p style="color:var(--charcoal-2);">The site design, writing, and studio marks belong to Launch &amp; Level Up Studio unless noted. Client work is covered by the agreement for that project. Please do not copy the site to present as your own.</p>
 
     <h2 style="margin:36px 0 14px;">Acceptable use</h2>
-    <p style="color:var(--charcoal-2);">Do not misuse the site — for example by flooding the contact form or attempting to break pages.</p>
+    <p style="color:var(--charcoal-2);">Do not misuse the site, for example by flooding the contact form or attempting to break pages.</p>
 
     <h2 style="margin:36px 0 14px;">Limits</h2>
     <p style="color:var(--charcoal-2);">The public site is provided as-is. Relying only on the website or the analyzer, instead of a scoped written agreement, is at your own risk.</p>
@@ -1692,7 +1692,7 @@ if (contactForm) {
     if (delivered) {
       contactForm.reset();
       if (success) {
-        success.textContent = 'Thanks — your inquiry was sent. We will reply to your email within 1 business day.';
+        success.textContent = 'Thanks. Your inquiry was sent. We will reply to your email within 1 business day.';
         success.classList.add('show');
       }
       contactForm.style.opacity = '0.5';
@@ -2108,7 +2108,7 @@ if (contactForm) {
     inputEl.placeholder = 'Daily message limit reached';
     const notice = document.createElement('div');
     notice.className = 'llu-cap-notice';
-    notice.innerHTML = formatBotHtml(`You've hit today's 6-message limit. Request a quote in chat, or book a call at https://launchandlevelupstudio.com/contact.html — or email ${cfg.contactEmail}.`);
+    notice.innerHTML = formatBotHtml(`You've hit today's 6-message limit. Request a quote in chat, or book a call at https://launchandlevelupstudio.com/contact.html, or email ${cfg.contactEmail}.`);
     messagesEl.appendChild(notice);
     messagesEl.scrollTop = messagesEl.scrollHeight;
   }
@@ -2247,7 +2247,7 @@ if (contactForm) {
       if (delivered) {
         addMessage('bot', `Thanks, ${lead.name.split(' ')[0] || 'there'}! We've got your details and the team will follow up soon.`);
       } else {
-        addMessage('bot', `Thanks, ${lead.name.split(' ')[0] || 'there'}! We had trouble confirming delivery on our end — to be safe, please also reach out directly at ${cfg.contactEmail || 'the contact page'} so we don't miss you.`);
+        addMessage('bot', `Thanks, ${lead.name.split(' ')[0] || 'there'}! We had trouble confirming delivery on our end. To be safe, please also reach out directly at ${cfg.contactEmail || 'the contact page'} so we don't miss you.`);
       }
     });
   }
