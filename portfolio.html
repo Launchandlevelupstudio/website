@@ -222,9 +222,16 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
     padding: 40px var(--pad);
     gap: 28px;
     transform: translateX(100%);
-    transition: transform .4s var(--ease);
+    visibility: hidden;
+    /* Hide the closed drawer from keyboard and screen readers without
+       cutting the slide: visibility waits until the transform finishes. */
+    transition: transform .4s var(--ease), visibility 0s linear .4s;
   }
-  .nav-links.open{ transform: translateX(0); }
+  .nav-links.open{
+    transform: translateX(0);
+    visibility: visible;
+    transition: transform .4s var(--ease), visibility 0s linear 0s;
+  }
   .nav-links a{ font-size: 22px; }
   .nav-toggle{
     display: flex; flex-direction: column; justify-content: center; gap: 5px;
@@ -1212,7 +1219,7 @@ img.hero-watermark{ max-width: min(520px, 70vw); opacity: 0.14; object-fit: cont
 
 <nav class="site-nav">
   <div class="wrap">
-    <a href="/" class="brand"><img src="assets/logo.png" alt="Launch &amp; Level Up Studio logo"></a>
+    <a href="/" class="brand"><img src="assets/logo.png" width="1000" height="844" alt="Launch &amp; Level Up Studio logo"></a>
     <ul class="nav-links">
       <li><a href="/">Home</a></li>
       <li><a href="services.html">Services</a></li>
@@ -1234,7 +1241,7 @@ img.hero-watermark{ max-width: min(520px, 70vw); opacity: 0.14; object-fit: cont
     <path d="M40 520 L520 40" stroke="#B8912F" stroke-width="10" stroke-linecap="round" opacity="0.4"/>
   </svg>
   <div class="page-header-glow" aria-hidden="true"></div>
-  <img class="page-header-logo" src="assets/logo.png" alt="Launch &amp; Level Up Studio logo">
+  <img class="page-header-logo" src="assets/logo.png" width="1000" height="844" alt="Launch &amp; Level Up Studio logo">
   <div class="wrap">
     <span class="eyebrow on-dark">Our Work</span>
     <h1>Real brands. Real transformations.</h1>
@@ -1267,7 +1274,7 @@ img.hero-watermark{ max-width: min(520px, 70vw); opacity: 0.14; object-fit: cont
       </div>
       <div class="shot-frame tilt-el">
         <div class="bar"><span></span><span></span><span></span></div>
-        <img src="assets/portfolio/creative-motion-events-website.jpg" alt="Creative Motion Events homepage hero with the gold logo, Fayola Whyte-Manco, and the rebrand headline">
+        <img src="assets/portfolio/creative-motion-events-website.jpg" width="1400" height="960" alt="Creative Motion Events homepage hero with the gold logo, Fayola Whyte-Manco, and the rebrand headline" loading="lazy">
       </div>
     </div>
   </div>
@@ -1297,7 +1304,7 @@ img.hero-watermark{ max-width: min(520px, 70vw); opacity: 0.14; object-fit: cont
       </div>
       <div class="shot-frame tilt-el">
         <div class="bar"><span></span><span></span><span></span></div>
-        <img src="assets/portfolio/maizeway-strategy-website.jpg" alt="MaizeWay Strategy homepage hero for fractional program and project management consulting">
+        <img src="assets/portfolio/maizeway-strategy-website.jpg" width="1400" height="741" alt="MaizeWay Strategy homepage hero for fractional program and project management consulting" loading="lazy">
       </div>
     </div>
   </div>
@@ -1324,14 +1331,14 @@ img.hero-watermark{ max-width: min(520px, 70vw); opacity: 0.14; object-fit: cont
       </div>
       <div class="shot-frame tilt-el">
         <div class="bar"><span></span><span></span><span></span></div>
-        <img src="assets/portfolio-kingdom-hero.jpg" alt="Kingdom Training website hero section: Built in the Trenches, Called Higher">
+        <img src="assets/portfolio-kingdom-hero.jpg" width="1400" height="689" alt="Kingdom Training website hero section: Built in the Trenches, Called Higher" loading="lazy">
       </div>
     </div>
 
     <div class="case-panel reveal" style="margin-top:2px;">
       <div class="shot-frame tilt-el" style="order:2;">
         <div class="bar"><span></span><span></span><span></span></div>
-        <img src="assets/portfolio-kingdom-credentials.jpg" alt="Kingdom Training website credentials and player showcase section">
+        <img src="assets/portfolio-kingdom-credentials.jpg" width="1400" height="687" alt="Kingdom Training website credentials and player showcase section" loading="lazy">
       </div>
       <div>
         <span class="eyebrow on-dark">Credibility, Front And Center</span>
@@ -1367,7 +1374,7 @@ img.hero-watermark{ max-width: min(520px, 70vw); opacity: 0.14; object-fit: cont
       </div>
       <div class="shot-frame tilt-el">
         <div class="bar"><span></span><span></span><span></span></div>
-        <img src="assets/portfolio-onelink-hero.jpg" alt="One Link Medical Logistics website hero section: Connecting Care, Delivering Trust">
+        <img src="assets/portfolio-onelink-hero.jpg" width="1400" height="692" alt="One Link Medical Logistics website hero section: Connecting Care, Delivering Trust" loading="lazy">
       </div>
     </div>
   </div>
@@ -1414,7 +1421,7 @@ img.hero-watermark{ max-width: min(520px, 70vw); opacity: 0.14; object-fit: cont
   <div class="wrap">
     <div class="footer-top">
       <div>
-        <img src="assets/logo.png" alt="Launch &amp; Level Up Studio logo">
+        <img src="assets/logo.png" width="1000" height="844" alt="Launch &amp; Level Up Studio logo" loading="lazy">
         <p>Next-generation design for brands ready to launch, grow, and level up.</p>
       </div>
       <div class="footer-col">
@@ -1457,14 +1464,31 @@ img.hero-watermark{ max-width: min(520px, 70vw); opacity: 0.14; object-fit: cont
 const navToggle = document.querySelector('.nav-toggle');
 const navLinks = document.querySelector('.nav-links');
 if (navToggle && navLinks) {
+  const navQuery = window.matchMedia('(max-width: 880px)');
+  function syncNavA11y() {
+    const closedOffscreen = navQuery.matches && !navLinks.classList.contains('open');
+    if (closedOffscreen) {
+      navLinks.setAttribute('aria-hidden', 'true');
+      navLinks.setAttribute('inert', '');
+    } else {
+      navLinks.removeAttribute('aria-hidden');
+      navLinks.removeAttribute('inert');
+    }
+    navToggle.setAttribute('aria-expanded', navLinks.classList.contains('open') ? 'true' : 'false');
+  }
   navToggle.addEventListener('click', () => {
     navToggle.classList.toggle('open');
     navLinks.classList.toggle('open');
+    syncNavA11y();
   });
   navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
     navToggle.classList.remove('open');
     navLinks.classList.remove('open');
+    syncNavA11y();
   }));
+  if (navQuery.addEventListener) navQuery.addEventListener('change', syncNavA11y);
+  else if (navQuery.addListener) navQuery.addListener(syncNavA11y);
+  syncNavA11y();
 }
 
 // Duplicate ticker content for seamless loop
@@ -1991,13 +2015,13 @@ if (contactForm) {
   const btn = document.createElement('button');
   btn.className = 'llu-chat-btn';
   btn.setAttribute('aria-label', 'Open ' + cfg.assistantName);
-  btn.innerHTML = '<img class="llu-chat-avatar" src="assets/chatbot-avatar.jpg" alt="AI Bot">';
+  btn.innerHTML = '<img class="llu-chat-avatar" src="assets/chatbot-avatar.jpg" width="800" height="533" alt="AI Bot">';
 
   const panel = document.createElement('div');
   panel.className = 'llu-chat-panel';
   panel.innerHTML = `
     <div class="llu-chat-header">
-      <div class="llu-chat-header-icon"><img src=\"assets/chatbot-avatar.jpg\" alt=\"\"></div>
+      <div class="llu-chat-header-icon"><img src=\"assets/chatbot-avatar.jpg\" width=\"800\" height=\"533\" alt=\"\" loading=\"lazy\"></div>
       <div class="llu-chat-header-text">
         <div class="name">${cfg.assistantName}</div>
       </div>
