@@ -3,17 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Privacy — Launch &amp; Level Up Studio</title>
+<title>Privacy | Launch &amp; Level Up Studio</title>
 <meta name="description" content="How Launch &amp; Level Up Studio handles information you send through the website.">
 <link rel="canonical" href="https://launchandlevelupstudio.com/privacy.html">
-<meta property="og:title" content="Privacy — Launch &amp; Level Up Studio">
+<meta property="og:title" content="Privacy | Launch &amp; Level Up Studio">
 <meta property="og:description" content="How Launch &amp; Level Up Studio handles information you send through the website.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://launchandlevelupstudio.com/privacy.html">
 <meta property="og:image" content="https://launchandlevelupstudio.com/assets/logo.png">
 <meta property="og:site_name" content="Launch &amp; Level Up Studio">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Privacy — Launch &amp; Level Up Studio">
+<meta name="twitter:title" content="Privacy | Launch &amp; Level Up Studio">
 <meta name="twitter:description" content="How Launch &amp; Level Up Studio handles information you send through the website.">
 <meta name="twitter:image" content="https://launchandlevelupstudio.com/assets/logo.png">
 <link rel="icon" type="image/png" href="assets/favicon.png">
@@ -1220,7 +1220,7 @@ img.hero-watermark{ max-width: min(520px, 70vw); opacity: 0.14; }
   "url": "https://launchandlevelupstudio.com",
   "logo": "https://launchandlevelupstudio.com/assets/logo.png",
   "email": "launchandlevelupstudio@gmail.com",
-  "description": "Next-generation design for businesses ready to launch, grow & level up. Website design, logo redesign, brand refresh, business launch support, and digital presence setup \u2014 serving small businesses across the United States, 100% remote.",
+  "description": "Next-generation design for businesses ready to launch, grow & level up. Website design, logo redesign, brand refresh, business launch support, and digital presence setup, serving small businesses across the United States, 100% remote.",
   "areaServed": "US"
 }
 </script>
@@ -1255,7 +1255,7 @@ img.hero-watermark{ max-width: min(520px, 70vw); opacity: 0.14; }
   <div class="wrap">
     <span class="eyebrow on-dark">Privacy</span>
     <h1>How we handle information you send us.</h1>
-    <p>A short notice for launchandlevelupstudio.com — written in plain language for a Maryland design studio.</p>
+    <p>A short notice for launchandlevelupstudio.com, written in plain language for a Maryland design studio.</p>
   </div>
 </header>
 
@@ -1263,7 +1263,7 @@ img.hero-watermark{ max-width: min(520px, 70vw); opacity: 0.14; }
   <div class="wrap" style="max-width:760px;">
 
     <h2 style="margin-bottom:14px;">What this page covers</h2>
-    <p style="color:var(--charcoal-2);">Launch &amp; Level Up Studio is a Maryland design studio. This notice explains how we handle information you send through launchandlevelupstudio.com. It is a plain-language description of current practice — not a certification, seal, or legal advice.</p>
+    <p style="color:var(--charcoal-2);">Launch &amp; Level Up Studio is a Maryland design studio. This notice explains how we handle information you send through launchandlevelupstudio.com. It is a plain-language description of current practice, not a certification, seal, or legal advice.</p>
 
     <h2 style="margin:36px 0 14px;">What we collect</h2>
     <p style="color:var(--charcoal-2);">If you use the contact form, we receive what you type: typically your name, email address, business name, selected interests, and project notes. That form posts to Web3Forms so the message can be delivered to <a href="mailto:launchandlevelupstudio@gmail.com">launchandlevelupstudio@gmail.com</a>.</p>
@@ -1689,7 +1689,7 @@ if (contactForm) {
     if (delivered) {
       contactForm.reset();
       if (success) {
-        success.textContent = 'Thanks — your inquiry was sent. We will reply to your email within 1 business day.';
+        success.textContent = 'Thanks. Your inquiry was sent. We will reply to your email within 1 business day.';
         success.classList.add('show');
       }
       contactForm.style.opacity = '0.5';
@@ -2105,7 +2105,7 @@ if (contactForm) {
     inputEl.placeholder = 'Daily message limit reached';
     const notice = document.createElement('div');
     notice.className = 'llu-cap-notice';
-    notice.innerHTML = formatBotHtml(`You've hit today's 6-message limit. Request a quote in chat, or book a call at https://launchandlevelupstudio.com/contact.html — or email ${cfg.contactEmail}.`);
+    notice.innerHTML = formatBotHtml(`You've hit today's 6-message limit. Request a quote in chat, or book a call at https://launchandlevelupstudio.com/contact.html, or email ${cfg.contactEmail}.`);
     messagesEl.appendChild(notice);
     messagesEl.scrollTop = messagesEl.scrollHeight;
   }
@@ -2244,7 +2244,7 @@ if (contactForm) {
       if (delivered) {
         addMessage('bot', `Thanks, ${lead.name.split(' ')[0] || 'there'}! We've got your details and the team will follow up soon.`);
       } else {
-        addMessage('bot', `Thanks, ${lead.name.split(' ')[0] || 'there'}! We had trouble confirming delivery on our end — to be safe, please also reach out directly at ${cfg.contactEmail || 'the contact page'} so we don't miss you.`);
+        addMessage('bot', `Thanks, ${lead.name.split(' ')[0] || 'there'}! We had trouble confirming delivery on our end. To be safe, please also reach out directly at ${cfg.contactEmail || 'the contact page'} so we don't miss you.`);
       }
     });
   }
